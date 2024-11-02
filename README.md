@@ -13,4 +13,4 @@ Pasos para clonar el repositorio:
 2. Cambiar a la rama "testing".
 3. Con el entorno virtual ACTIVADO, ejecutar el siguiente comando: pip install -r requirements.txt
 
-El paso #3 se realiza cada vez que se quieran probar los cambios, ya que la carpeta venv no se subira a ninguna rama (revisar que tenga .gitignore o no incluirla en los commit)
+El paso #3 se realiza una vez ya que es para configurar el entorno virtual. A menos que se añadan librerias o requerimientos.

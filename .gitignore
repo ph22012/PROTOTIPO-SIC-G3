@@ -10,3 +10,8 @@
 
 /EstadosFinancieros/__pycache__
 /EstadosFinancieros/migrations/__pycache__
+
+#ARCHIVOS IGNORADOS INCIO SESION
+/iniciosesion/__pycache__
+/iniciosesion/migrations/__pycache__
+

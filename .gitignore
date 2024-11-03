@@ -5,3 +5,8 @@
 #ignorar la carpeta _pycache_
 
 /PrototipoSic/__pycache__
+
+#IGNORAR __pycache__ anidados
+
+/EstadosFinancieros/__pycache__
+/EstadosFinancieros/migrations/__pycache__

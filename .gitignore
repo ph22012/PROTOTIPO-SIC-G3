@@ -1,7 +1,5 @@
 #ignorar la carpeta venv
 /venv
-
-
 #ignorar la carpeta _pycache_
 
 /PrototipoSic/__pycache__

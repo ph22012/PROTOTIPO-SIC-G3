@@ -10,3 +10,11 @@
 
 /EstadosFinancieros/__pycache__
 /EstadosFinancieros/migrations/__pycache__
+
+#ARCHIVOS IGNORADOS INCIO SESION
+/iniciosesion/__pycache__
+/iniciosesion/migrations/__pycache__
+
+#ARCHIVOS IGNORADOS CATALOGO DE CUENTAS
+/catalogocuentas/__pycache__
+/catalogocuentas/migrations/__pycache__

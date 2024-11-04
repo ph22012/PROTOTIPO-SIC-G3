@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio Sesión</title>
+    <link rel="stylesheet" href="{% static 'CSS/bootstrap.css' %}"> 
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-4 mt-5">
+                <form action="/login/" method="post" class="border p-4 rounded shadow">
+                    <h2 class="text-center mb-4" style="font-size: 2.5rem;">Gestión Expert</h2>
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Usuario:</label>
+                        <input type="text" id="username" name="username" class="form-control"  placeholder="Correo, celular o usuario" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña:</label>
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" required>
+                    </div>
+                    <a href="#" class="d-block text-center mt-4 mb-4" style="color: #000; text-decoration: none;">¿Has olvidado la contraseña?</a>
+                    <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

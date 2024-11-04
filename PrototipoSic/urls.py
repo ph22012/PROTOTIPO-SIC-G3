@@ -20,5 +20,6 @@ from EstadosFinancieros import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('gestion/', views.gestionar)
+    path('gestion/', views.gestionar),
+    path('gestion/balance-comprobacion/', views.comprobacion),
 ]

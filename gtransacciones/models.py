@@ -19,3 +19,10 @@ class Transaction(models.Model):
 
     def _str_(self):
         return f"{self.date} - {self.description} - {self.amount}"
+
+class saldosTransaccion(models.Model):
+    idSaldoTransaccion = models.AutoField(primary_key=True)
+    idCuenta = models.CharField(max_length=2)
+    debeTransaccion = models.IntegerField()
+    haberTransaccion = models.IntegerField()
+    fechaTransaccion = models.DateField()

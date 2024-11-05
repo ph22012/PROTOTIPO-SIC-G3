@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from .forms import TransactionForm
 
 # Create your views here.
-def transacciones(request):
-    return render(request, 'rtransacciones.html')
+"""def transacciones(request):
+    return render(request, 'rtransacciones.html')"""
 
 
 def create_transaction(request):

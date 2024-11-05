@@ -22,6 +22,7 @@ class Transaction(models.Model):
 
 class saldosTransaccion(models.Model):
     idSaldoTransaccion = models.AutoField(primary_key=True)
+    idTransaccion = models.IntegerField()
     idCuenta = models.CharField(max_length=2)
     debeTransaccion = models.IntegerField()
     haberTransaccion = models.IntegerField()

@@ -22,7 +22,7 @@ class Transaction(models.Model):
 
 
 
-    """date = models.DateField()
+"""date = models.DateField()
     description = models.CharField(max_length=255)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     debit_account = models.ForeignKey(Account, related_name='debit_transactions', on_delete=models.CASCADE)
@@ -38,7 +38,7 @@ class saldosTransaccion(models.Model):
     debeTransaccion = models.IntegerField()
     haberTransaccion = models.IntegerField()
     fechaTransaccion = models.DateField()
-"""
+
 Logica de registro de transaccion 
 tabla que contiene: idTransaccion 
                     numPartidad

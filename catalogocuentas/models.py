@@ -1,9 +1,6 @@
 from django.db import models
 
 # Create your models here.
-from django.db import models
-
-# Create your models here.
 class Cuenta(models.Model):
     idCuenta = models.AutoField(unique=True, primary_key=True)
     codClase = models.IntegerField()

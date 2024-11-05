@@ -3,7 +3,6 @@ from .models import Cuenta
 
 # Create your views here.
 def catalogoCuentas(request):
-    #cuentas = Cuenta.objects.all()
     activos = Cuenta.objects.filter(codClase='1')  
     pasivos = Cuenta.objects.filter(codClase='2')  
     patrimonio = Cuenta.objects.filter(codClase='3')  
@@ -18,5 +17,3 @@ def catalogoCuentas(request):
         'resultado_acreedor': resultado_acreedor,
         'cuentas_cierre': cuentas_cierre,
     })
-
-#{'cuentas': cuentas}

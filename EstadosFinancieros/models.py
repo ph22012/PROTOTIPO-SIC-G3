@@ -12,8 +12,8 @@ class periodos(models.Model) :
     class Meta: 
         db_table = 'periodos'
         managed = False
-    #def __str__(self):
-    #    return self.nombre_periodo
+    def __str__(self):
+        return str( self.idPeriodo)
     
 class tiposEstados(models.Model) :
     idTipoEstado = models.AutoField(primary_key=True)
@@ -21,8 +21,8 @@ class tiposEstados(models.Model) :
     class Meta: 
         db_table = 'tiposEstados'
         managed = False
-    #def __str__(self):
-    #    return self.nombreEstado
+    def __str__(self):
+        return self.nombreEstado
 
 class estadosFinancieros(models.Model):
     idEstado = models.AutoField(primary_key=True)

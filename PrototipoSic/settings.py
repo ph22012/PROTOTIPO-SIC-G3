@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'EstadosFinancieros',
     'gtransacciones',
+    'iniciosesion',
+    'catalogocuentas',
 ]
 
 MIDDLEWARE = [

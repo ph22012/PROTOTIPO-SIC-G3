@@ -16,3 +16,7 @@
 #ARCHIVOS IGNORADOS CATALOGO DE CUENTAS
 /catalogocuentas/__pycache__
 /catalogocuentas/migrations/__pycache__
+
+#ARCHIVOS DE TRANSACCIONES  
+/gtransacciones/__pycache__
+/gtransacciones/migrations/__pycache__

@@ -20,3 +20,7 @@
 #ARCHIVOS DE TRANSACCIONES  
 /gtransacciones/__pycache__
 /gtransacciones/migrations/__pycache__
+
+#Archivo db
+
+db.sqlite3

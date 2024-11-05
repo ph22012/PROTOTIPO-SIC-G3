@@ -1,7 +1,5 @@
 #ignorar la carpeta venv
 /venv
-
-
 #ignorar la carpeta _pycache_
 
 /PrototipoSic/__pycache__
@@ -18,3 +16,11 @@
 #ARCHIVOS IGNORADOS CATALOGO DE CUENTAS
 /catalogocuentas/__pycache__
 /catalogocuentas/migrations/__pycache__
+
+#ARCHIVOS DE TRANSACCIONES  
+/gtransacciones/__pycache__
+/gtransacciones/migrations/__pycache__
+
+#Archivo db
+
+db.sqlite3

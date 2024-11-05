@@ -35,12 +35,13 @@ def create_transaction(request):
 from .forms import TransactionForm
 from .models import Transaction
 
+
 # Create your views here.
 def transacciones(request):
     return render(request, 'rtransacciones.html')
 
 
-def create_transaction(request):
+"""def create_transaction(request):
     if request.method == 'POST':
         form = TransactionForm(request.POST)
         if form.is_valid():

@@ -26,5 +26,6 @@ urlpatterns = [
     path('', include('EstadosFinancieros.urls')),
     path('', include('iniciosesion.urls')),
     path('', include('catalogocuentas.urls')),
+    path('', include('gtransacciones.urls')),
 
 ]

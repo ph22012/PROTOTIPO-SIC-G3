@@ -1,6 +1,58 @@
 {% extends 'layouts/base.html' %}
 {% block content %}
-    <div class="container" style="max-width: 600px; margin-top: 50px; text-align: center;">
+<div class="text-start fw-bold mt-4">ACTIVOS</div>
+{% for cuenta in activos %}
+<div class="border-bottom py-2 d-flex">
+    <div class="col-3">{{ cuenta.codCuenta }}</div>
+    <div class="col-9">{{ cuenta.nameCuenta }}</div>
+</div>
+{% endfor %}
+
+<div class="text-start fw-bold mt-4">PASIVOS</div>
+{% for cuenta in pasivos %}
+<div class="border-bottom py-2 d-flex">
+    <div class="col-3">{{ cuenta.codCuenta }}</div>
+    <div class="col-9">{{ cuenta.nameCuenta }}</div>
+</div>
+{% endfor %}
+
+<div class="text-start fw-bold mt-4">PATRIMONIO</div>
+{% for cuenta in patrimonio %}
+<div class="border-bottom py-2 d-flex">
+    <div class="col-3">{{ cuenta.codCuenta }}</div>
+    <div class="col-9">{{ cuenta.nameCuenta }}</div>
+</div>
+{% endfor %}
+
+<div class="text-start fw-bold mt-4">CUENTAS DE RESULTADO DEUDOR</div>
+{% for cuenta in resultado_deudor %}
+<div class="border-bottom py-2 d-flex">
+    <div class="col-3">{{ cuenta.codCuenta }}</div>
+    <div class="col-9">{{ cuenta.nameCuenta }}</div>
+</div>
+{% endfor %}
+
+<div class="text-start fw-bold mt-4">CUENTAS DE RESULTADO ACREEDOR</div>
+{% for cuenta in resultado_acreedor %}
+<div class="border-bottom py-2 d-flex">
+    <div class="col-3">{{ cuenta.codCuenta }}</div>
+    <div class="col-9">{{ cuenta.nameCuenta }}</div>
+</div>
+{% endfor %}
+
+<div class="text-start fw-bold mt-4">CUENTAS DE CIERRE</div>
+{% for cuenta in cuentas_cierre %}
+<div class="border-bottom py-2 d-flex">
+    <div class="col-3">{{ cuenta.codCuenta }}</div>
+    <div class="col-9">{{ cuenta.nameCuenta }}</div>
+</div>
+{% endfor %}
+
+    
+
+
+
+<!--  <div class="container" style="max-width: 600px; margin-top: 50px; text-align: center;">
         <h2>Gestión Expert S.A de C.V</h2>
         <p class="text-muted">CATÁLOGO DE CUENTAS</p>
 
@@ -13,5 +65,6 @@
         <div class="border-bottom py-2 text-start">Cuenta 4</div>
         <div class="border-bottom py-2 text-start">Cuenta 5</div>
         <div class="border-bottom py-2 text-start">Cuenta 6</div>
-    </div>
+</div>  -->
+
 {% endblock %}

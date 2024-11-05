@@ -12,6 +12,7 @@ class Cuenta(models.Model):
 
     class Meta:
         db_table = 'cuentas'
+        managed = False
 
     def __str__(self):
         return self.nameCuenta

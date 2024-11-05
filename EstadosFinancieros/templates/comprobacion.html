@@ -5,7 +5,7 @@
     <div class=" row mx-3" style="margin-top: 50px">
         <h2 class="text-center col-12"> Gestion Expert S.A de C.V </h2>
         <h4 class="text-center col-12"> Balance de comprobacion </h4>
-        <h4 class="text-center col-12"> del DD de MM al DD de MM del 2024 </h4>
+        <h4 class="text-center col-12"> del {{periodoActual.fechaInicio|date:"d/m"}} al {{periodoActual.fechaFin|date:"d/m"}} del {{periodoActual.fechaInicio|date:"Y"}} </h4>
     </div>
 
     <div style="margin-top:40px ;">
@@ -18,6 +18,22 @@
                     <th scope="col"> Haber</th>
                 </tr>
             </thead>
+            <tbody>
+                {% for saldo in saldosComprobacion %}
+                    
+                        <tr>
+                            <td>{{saldo.idCuenta.codCuenta}}</td>
+                            <td>{{saldo.idCuenta.nameCuenta}}</td>
+                            <td>{{saldo.debe}}</td>
+                            <td>{{saldo.haber}}</td>
+                        </tr>
+                {% endfor%}
+                        <tr>
+                            <td colspan="2" class="fw-bold">Total</td>
+                            <td class="fw-bold">{{sumDebe}}</td>
+                            <td class="fw-bold">{{sumHaber}}</td>
+                        </tr>
+            </tbody>
         </table>
     </div>
 

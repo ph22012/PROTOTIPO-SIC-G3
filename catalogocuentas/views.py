@@ -1,6 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from .models import Cuenta
 
+@login_required
 # Create your views here.
 def catalogoCuentas(request):
     activos = Cuenta.objects.filter(codClase='1')  

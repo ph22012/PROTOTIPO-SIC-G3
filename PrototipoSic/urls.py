@@ -22,10 +22,11 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('EstadosFinancieros.urls')),
     path('', include('iniciosesion.urls')),
-    path('', include('catalogocuentas.urls')),
+    path('admin/', admin.site.urls),
     path('', include('gtransacciones.urls')),
-    path('accounts/', include('django.contrib.auth.urls'))
+    #path('login/', include('iniciosesion.urls')),
+    path('', include('EstadosFinancieros.urls')),
+    path('', include('catalogocuentas.urls')),
+    
 ]

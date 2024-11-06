@@ -9,6 +9,9 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = '/create-transaction/'
+
 
 from pathlib import Path
 

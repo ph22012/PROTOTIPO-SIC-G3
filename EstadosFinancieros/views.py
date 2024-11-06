@@ -1,10 +1,11 @@
+from django.contrib.auth.decorators import login_required
 from datetime import date
 from django.shortcuts import render
 from .models import periodos, estadosFinancieros
 from catalogocuentas.models import SaldosCuentas
 
 # Create your views here.
-
+@login_required
 def gestionar(request):
     fechaHoy = date.today();
     periodosContables = periodos.objects.all()

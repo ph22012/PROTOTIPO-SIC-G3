@@ -49,7 +49,7 @@ class Transaction(models.Model):
     numPartida = models.CharField(max_length=50) 
     idCuenta = models.ForeignKey(Cuenta, on_delete=models.CASCADE)
     monto = models.DecimalField(max_digits=10, decimal_places=2)   
-    descripcion = models.TextField()
+    descripcion = models.CharField(max_length=200)
     fecha = models.DateField()
 
     class Meta:

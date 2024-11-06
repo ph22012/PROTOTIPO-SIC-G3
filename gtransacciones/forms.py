@@ -9,7 +9,9 @@ class SaldosTransaccionForm(forms.ModelForm):
 class TransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction
-        fields = ['fecha', 'descripcion', 'monto', 'idCuenta']
+        fields = ['fecha', 'descripcion']
+
+
 
 # Crear un formset para los saldos
 from django.forms import modelformset_factory

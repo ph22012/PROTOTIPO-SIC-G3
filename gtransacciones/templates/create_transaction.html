@@ -8,14 +8,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Transacción</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Centrar el formulario en la página */
+        .form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 10vh;  /* Asegura que ocupe toda la altura de la ventana */
+            flex-direction: column;
+        }
+
+        /* Centrar los campos del formulario */
+        form {
+            width: 300px;  /* Ancho del formulario, ajustable */
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+
+        /* Centrar los elementos dentro de los párrafos del formulario */
+        form p {
+            text-align: center;
+        }
+
+        /* Estilo adicional para inputs */
+        form input, form select {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
-        <h2>Registrar Transacción</h2>
+        <div class="form-container">
+        <h2 style="text-align:center">Registrar Transacción</h2>
         
         <form method="post" action="">
             {% csrf_token %}
             {{ form.as_p }}  <!-- Campos del formulario -->
+        
+        </div>
             <div id="saldos-container">
                 <h4>Saldos</h4>
                 <div class="input-group mb-3">

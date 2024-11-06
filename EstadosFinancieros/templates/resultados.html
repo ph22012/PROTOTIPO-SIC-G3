@@ -8,6 +8,73 @@
             <h4 class="text-center col-12"> Estado de resultados </h4>
             <h4 class="text-center col-12"> del {{periodoActual.fechaInicio|date:"d/m"}} al {{periodoActual.fechaFin|date:"d/m"}} del {{periodoActual.fechaInicio|date:"Y"}} </h4>
         </div>
+        
+        <div style="margin-top: 40px;">
+            <table class="table w-100">
+                <thead>
+                    <tr>
+                        <th scope="col"> Operacion </th>
+                        <th scope="col"> Concepto </th>
+                        <th scope="col" > Monto </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for saldo in ventasNetas %}
+                    <tr>
+                        {%if saldo.idCuenta.codCuenta == "5101" %}
+                            <td> (+)</td>
+                        {%else%}
+                            <td> (-) </td>
+                        {%endif%}
 
+                        <td>{{saldo.idCuenta.nameCuenta}}</td>
+
+                        {% if saldo.debe > 0 %}
+                            <td>{{saldo.debe}}</td>
+                        {%else%}
+                            <td>{{saldo.haber}}</td>
+                        {%endif%}
+                        
+                    </tr>
+                    {%endfor%}
+
+                    <tr style="background-color: gray;">
+                        <td colspan="2" class="fw-bold text-center"> UTILIDAD DEL EJERCICIO = </td>
+                        <td class="fw-bold"> {{utilidadBruta}}</td>
+                    </tr>
+                    <tr>
+                        {%for saldo in gastosOperacion %}
+                        <td>(-)</td>
+                        <td>{{saldo.idCuenta.nameCuenta}}</td>
+                        <td>{{saldo.debe}}</td>
+                        {%endfor%}
+                    </tr>
+                    <tr style="background-color: gray;">
+                        <td colspan="2" class="fw-bold text-center"> UTILIDAD DE OPERACION = </td>
+                        <td class="fw-bold"> {{utilidadOperacion}}</td>
+                    </tr>
+                    {%for saldo in gastosFinancieros %}
+                    <tr>
+                        <td>(-)</td>
+                        <td>{{saldo.idCuenta.nameCuenta}}</td>
+                        <td>{{saldo.debe}}</td>
+                    </tr>
+                    {%endfor%}
+                    <tr style="background-color: gray;">
+                        <td colspan="2" class="fw-bold text-center"> UTILIDAD ANTES DE IMPUESTOS = </td>
+                        <td class="fw-bold"> {{utilidadSinImpuestos}}</td>
+                    </tr>
+                    <tr>
+                        <td>(-)</td>
+                        <td>Impuestos</td>
+                        <td>0</td>
+                    </tr>
+                    <tr style="background-color: gray;">
+                        <td colspan="2" class="fw-bold text-center"> UTILIDAD NETA = </td>
+                        <td class="fw-bold"> {{utilidadSinImpuestos}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 {%endblock%}

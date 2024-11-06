@@ -1,12 +1,15 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .forms import TransactionForm, SaldosTransaccionFormSet
+from .forms import TransactionForm, SaldosTransaccionForm
 from .models import Transaction, SaldosTransaccion
 @login_required
 def create_transaction(request):
     if request.method == 'POST':
         form = TransactionForm(request.POST)
+        #form2 = SaldosTransaccionForm(request.POST)
+
         if form.is_valid():
+
             transaction = form.save()  # Guarda la transacción
             #saldos_data = request.POST.getlist('saldos')
             
@@ -35,7 +38,8 @@ def create_transaction(request):
             return redirect('create_transaction')  # Redirige a la misma página para registrar otra transacción
     else:
         form = TransactionForm()
-    return render(request, 'create_transaction.html', {'form': form})
+
+    return render(request, 'create_transaction.html', {'form': form} )
 
 
 

@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
                 ('idTransaccion', models.AutoField(primary_key=True, serialize=False)),
                 ('numPartida', models.CharField(max_length=50)),
                 ('monto', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('descripcion', models.TextField()),
+                ('descripcion', models.CharField(max_length=200)),
                 ('fecha', models.DateField()),
                 ('idCuenta', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='gtransacciones.cuenta')),
             ],

@@ -46,9 +46,9 @@ class Cuenta(models.Model):
 class Transaction(models.Model):
     idTransaccion = models.AutoField(primary_key=True)
     #idPeriodo = models.ForeignKey('periodos', on_delete=models.CASCADE)
-    numPartida = models.CharField(max_length=50) 
-    idCuenta = models.ForeignKey(Cuenta, on_delete=models.CASCADE)
-    monto = models.DecimalField(max_digits=10, decimal_places=2)   
+    # numPartida = models.CharField(max_length=50) 
+    # idCuenta = models.ForeignKey(Cuenta, on_delete=models.CASCADE)
+    # monto = models.DecimalField(max_digits=10, decimal_places=2)   
     descripcion = models.CharField(max_length=200)
     fecha = models.DateField()
 
@@ -59,20 +59,7 @@ class Transaction(models.Model):
     def __str__(self):
         return f'Transacción {self.idTransaccion}'
 
-    def registrar_saldo(self, id_cuenta, monto, tipo, fecha):
-        saldo_transaccion = SaldosTransaccion(
-            idCuenta=id_cuenta,
-            idTransaccion=self,
-            fecha=fecha
-        )
-        if tipo.lower() == 'cargo':
-            saldo_transaccion.monto_cargo = monto
-        elif tipo.lower() == 'haber':
-            saldo_transaccion.monto_haber = monto
-        else:
-            raise ValueError("El tipo de saldo debe ser 'cargo' o 'haber'.")
-
-        saldo_transaccion.save()
+   
 
 class SaldosTransaccion(models.Model):
     idSaldoTransaccion = models.AutoField(primary_key=True)
@@ -87,4 +74,20 @@ class SaldosTransaccion(models.Model):
 
     def __str__(self):
         return f'Saldo {self.idSaldoTransaccion} - Cuenta: {self.idCuenta}'
+    
+    def registrar_saldo(self, id_cuenta, monto, tipo, fecha):
+        saldo_transaccion = SaldosTransaccion(
+            idCuenta=id_cuenta,
+            monto = monto,
+            idTransaccion=self,
+            fecha=fecha
+        )
+        if tipo.lower() == 'cargo':
+            saldo_transaccion.monto_cargo = monto
+        elif tipo.lower() == 'haber':
+            saldo_transaccion.monto_haber = monto
+        else:
+            raise ValueError("El tipo de saldo debe ser 'cargo' o 'haber'.")
+
+        saldo_transaccion.save()
 

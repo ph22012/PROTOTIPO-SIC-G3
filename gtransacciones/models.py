@@ -17,35 +17,3 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f'Transacción {self.idTransaccion} - {self.descripcion}'
-
-
-
-
-
-"""date = models.DateField()
-    description = models.CharField(max_length=255)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    debit_account = models.ForeignKey(Account, related_name='debit_transactions', on_delete=models.CASCADE)
-    credit_account = models.ForeignKey(Account, related_name='credit_transactions', on_delete=models.CASCADE)
-
-    def _str_(self):
-        return f"{self.date} - {self.description} - {self.amount}"
-
-class saldosTransaccion(models.Model):
-    idSaldoTransaccion = models.AutoField(primary_key=True)
-    idTransaccion = models.IntegerField()
-    idCuenta = models.CharField(max_length=2)
-    debeTransaccion = models.IntegerField()
-    haberTransaccion = models.IntegerField()
-    fechaTransaccion = models.DateField()
-
-Logica de registro de transaccion 
-tabla que contiene: idTransaccion 
-                    numPartidad
-                    idCuenta
-                    monto_cargado
-                    Monto_abonado
-                    descripcion
-                    fecha
-"""
-

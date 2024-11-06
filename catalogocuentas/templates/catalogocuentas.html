@@ -1,50 +1,59 @@
 {% extends 'layouts/base.html' %}
 {% block content %}
-<div class="text-start fw-bold mt-4">ACTIVOS</div>
-{% for cuenta in activos %}
-<div class="border-bottom py-2 d-flex">
-    <div class="col-3">{{ cuenta.codCuenta }}</div>
-    <div class="col-9">{{ cuenta.nameCuenta }}</div>
-</div>
-{% endfor %}
+<div class="container" style="margin: 0 auto; max-width: 800px;">
+    <!-- Título principal -->
+    <h1 class="text-center mt-4" style="font-size: 3rem;">Gestión Expert</h1>
+    <!-- Subtítulo -->
+    <h2 class="text-center mb-5" style="font-size: 2rem;">Catálogo de cuentas</h2>
 
-<div class="text-start fw-bold mt-4">PASIVOS</div>
-{% for cuenta in pasivos %}
-<div class="border-bottom py-2 d-flex">
-    <div class="col-3">{{ cuenta.codCuenta }}</div>
-    <div class="col-9">{{ cuenta.nameCuenta }}</div>
-</div>
-{% endfor %}
+    <!-- Contenido de cuentas con margen ajustado a la izquierda y justificado -->
+    <div class="text-start fw-bold mt-4">ACTIVOS</div>
+    {% for cuenta in activos %}
+    <div class="border-bottom py-2 d-flex justify-content-between" style="text-align: justify; margin-left: 20px;">
+        <div class="col-3">{{ cuenta.codCuenta }}</div>
+        <div class="col-9">{{ cuenta.nameCuenta }}</div>
+    </div>
+    {% endfor %}
 
-<div class="text-start fw-bold mt-4">PATRIMONIO</div>
-{% for cuenta in patrimonio %}
-<div class="border-bottom py-2 d-flex">
-    <div class="col-3">{{ cuenta.codCuenta }}</div>
-    <div class="col-9">{{ cuenta.nameCuenta }}</div>
-</div>
-{% endfor %}
+    <div class="text-start fw-bold mt-4">PASIVOS</div>
+    {% for cuenta in pasivos %}
+    <div class="border-bottom py-2 d-flex justify-content-between" style="text-align: justify; margin-left: 20px;">
+        <div class="col-3">{{ cuenta.codCuenta }}</div>
+        <div class="col-9">{{ cuenta.nameCuenta }}</div>
+    </div>
+    {% endfor %}
 
-<div class="text-start fw-bold mt-4">CUENTAS DE RESULTADO DEUDOR</div>
-{% for cuenta in resultado_deudor %}
-<div class="border-bottom py-2 d-flex">
-    <div class="col-3">{{ cuenta.codCuenta }}</div>
-    <div class="col-9">{{ cuenta.nameCuenta }}</div>
-</div>
-{% endfor %}
+    <div class="text-start fw-bold mt-4">PATRIMONIO</div>
+    {% for cuenta in patrimonio %}
+    <div class="border-bottom py-2 d-flex justify-content-between" style="text-align: justify; margin-left: 20px;">
+        <div class="col-3">{{ cuenta.codCuenta }}</div>
+        <div class="col-9">{{ cuenta.nameCuenta }}</div>
+    </div>
+    {% endfor %}
 
-<div class="text-start fw-bold mt-4">CUENTAS DE RESULTADO ACREEDOR</div>
-{% for cuenta in resultado_acreedor %}
-<div class="border-bottom py-2 d-flex">
-    <div class="col-3">{{ cuenta.codCuenta }}</div>
-    <div class="col-9">{{ cuenta.nameCuenta }}</div>
-</div>
-{% endfor %}
+    <div class="text-start fw-bold mt-4">CUENTAS DE RESULTADO DEUDOR</div>
+    {% for cuenta in resultado_deudor %}
+    <div class="border-bottom py-2 d-flex justify-content-between" style="text-align: justify; margin-left: 20px;">
+        <div class="col-3">{{ cuenta.codCuenta }}</div>
+        <div class="col-9">{{ cuenta.nameCuenta }}</div>
+    </div>
+    {% endfor %}
 
-<div class="text-start fw-bold mt-4">CUENTAS DE CIERRE</div>
-{% for cuenta in cuentas_cierre %}
-<div class="border-bottom py-2 d-flex">
-    <div class="col-3">{{ cuenta.codCuenta }}</div>
-    <div class="col-9">{{ cuenta.nameCuenta }}</div>
+    <div class="text-start fw-bold mt-4">CUENTAS DE RESULTADO ACREEDOR</div>
+    {% for cuenta in resultado_acreedor %}
+    <div class="border-bottom py-2 d-flex justify-content-between" style="text-align: justify; margin-left: 20px;">
+        <div class="col-3">{{ cuenta.codCuenta }}</div>
+        <div class="col-9">{{ cuenta.nameCuenta }}</div>
+    </div>
+    {% endfor %}
+
+    <div class="text-start fw-bold mt-4">CUENTAS DE CIERRE</div>
+    {% for cuenta in cuentas_cierre %}
+    <div class="border-bottom py-2 d-flex justify-content-between" style="text-align: justify; margin-left: 20px;">
+        <div class="col-3">{{ cuenta.codCuenta }}</div>
+        <div class="col-9">{{ cuenta.nameCuenta }}</div>
+    </div>
+    {% endfor %}
 </div>
-{% endfor %}
 {% endblock %}
+

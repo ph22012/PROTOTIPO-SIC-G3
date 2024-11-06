@@ -88,3 +88,4 @@ class SaldosTransaccion(models.Model):
     def __str__(self):
         return f'Saldo {self.idSaldoTransaccion} - Cuenta: {self.idCuenta}'
 
+

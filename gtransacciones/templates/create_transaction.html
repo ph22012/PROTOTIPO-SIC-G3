@@ -1,6 +1,6 @@
-{% extends 'layouts/base.html'%}
+{% extends 'layouts/base.html' %}
 
-{%block content%}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,10 +15,38 @@
         
         <form method="post" action="">
             {% csrf_token %}
-            {{ form.as_p }}  <!-- Esto mostrará los campos del formulario automáticamente -->
+            {{ form.as_p }}  <!-- Campos del formulario -->
+            <div id="saldos-container">
+                <h4>Saldos</h4>
+                <div class="input-group mb-3">
+                    <input type="text" name="saldos[0][idCuenta]" class="form-control" placeholder="ID de Cuenta" required>
+                    <input type="number" name="saldos[0][monto]" class="form-control" placeholder="Monto" required>
+                    <select name="saldos[0][tipo]" class="form-control" required>
+                        <option value="cargo">Cargo</option>
+                        <option value="haber">Haber</option>
+                    </select>
+                    <input type="date" name="saldos[0][fecha]" class="form-control" required>
+                </div>
+            </div>
+            <button type="button" id="add-saldo" class="btn btn-secondary mb-3">Agregar Saldo</button>
             <button type="submit" class="btn btn-primary">Guardar Transacción</button>
         </form>
     </div>
-</body>
-</html>
-{%endblock%}
+
+    <script>
+        document.getElementById('add-saldo').onclick = function() {
+            var container = document.getElementById('saldos-container');
+            var index = container.children.length;
+            var newSaldo = `<div class="input-group mb-3">
+                <input type="text" name="saldos[${index}][idCuenta]" class="form-control" placeholder="ID de Cuenta" required>
+                <input type="number" name="saldos[${index}][monto]" class="form-control" placeholder="Monto" required>
+                <select name="saldos[${index}][tipo]" class="form-control" required>
+                    <option value="cargo">Cargo</option>
+                    <option value="haber">Haber</option>
+                </select>
+                <input type="date" name="saldos[${index}][fecha]" class="form-control" required>
+            </div>`;
+            container.insertAdjacentHTML('beforeend', newSaldo);
+        }
+    </script>
+{% endblock %}

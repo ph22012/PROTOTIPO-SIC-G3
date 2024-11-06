@@ -7,7 +7,7 @@
         <h3 class="text-center"> Periodo: </h3>
     </div>
     <div class=" col-6">
-        <form class="text-center" style="font-size: larger;"> dd-mm-yy</form>
+        <form class="text-center" style="font-size: larger;">{{ periodoActual.fechaInicio|date:"d-m-Y" }} al {{ periodoActual.fechaFin|date:"d-m-Y" }}</form>
     </div>
     
     <div class="card my-4 w-100">
@@ -17,12 +17,8 @@
             <div class="col-8 text-center">
               <h5>Balance de comprobacion</h5>
             </div>
-            <div class="col-2 text-center">
+            <div class="col-2 offset-2 text-center">
                 <a href="/gestionar/balance-comprobacion"><button class="btn-outline-primary w-100">Ver</button></a>
-              
-            </div>
-            <div class="col-2 text-center">
-              <button class="btn-outline-success w-100">Generar</button>
             </div>
           </div>
         </li>
@@ -32,7 +28,7 @@
               <h5>Estado de resultados</h5>
             </div>
             <div class="col-2 text-center">
-              <button class="btn-outline-primary w-100">Ver</button>
+              <a href="/gestionar/estado-resultado"><button class="btn-outline-primary w-100">Ver</button></a>
             </div>
             <div class="col-2 text-center">
               <button class="btn-outline-success w-100">Generar</button>

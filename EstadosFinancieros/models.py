@@ -25,11 +25,13 @@ class tiposEstados(models.Model) :
         return self.nombreEstado
 
 class estadosFinancieros(models.Model):
-    idEstado = models.AutoField(primary_key=True)
+    idEstado = models.AutoField(primary_key=True, unique=True)
     idTipoEstado = models.ForeignKey('tiposEstados',on_delete=models.CASCADE,db_column='idTipoEstado',to_field='idTipoEstado')
     idPeriodo = models.ForeignKey('periodos',on_delete=models.CASCADE, db_column='idPeriodo',to_field='idPeriodo')
-
-class saldosEstados(models.Model):
-    idSaldoEstado = models.AutoField(primary_key=True)
-    idEstado = models.ForeignKey('estadosFinancieros',on_delete=models.CASCADE, db_column='idEstado', to_field='idEstado')
-    idSaldo = models.CharField(max_length=2)
+    
+    def __str__(self):
+        return f'{self.idTipoEstado.nombreEstado} - Periodo {self.idPeriodo}'
+#class saldosEstados(models.Model):
+#    idSaldoEstado = models.AutoField(primary_key=True)
+#    idEstado = models.ForeignKey('estadosFinancieros',on_delete=models.CASCADE, db_column='idEstado', to_field='idEstado')
+#    idSaldo = models.ForeignKey('catalogocuentas.SaldosCuentas', on_delete=models.CASCADE, db_column='idSaldo',to_field='idSaldo')

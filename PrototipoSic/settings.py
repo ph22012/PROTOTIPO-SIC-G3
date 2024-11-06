@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/create-transaction/'
+LOGOUT_REDIRECT_URL = 'login'
 
 
 from pathlib import Path

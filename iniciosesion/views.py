@@ -10,8 +10,8 @@ def login_sesion(request):
         # Autenticar al usuario
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)  # Inicia sesión
-            return redirect('/create-transaction/')  # Redirige a la página de otra app
+            login(request, user)  
+            return redirect('/create-transaction/') 
         else:
             return HttpResponse("Credenciales incorrectas. Por favor, intenta de nuevo.")
     return render(request, 'iniciosesion.html')

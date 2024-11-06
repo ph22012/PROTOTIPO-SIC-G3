@@ -60,7 +60,12 @@
                 />
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">Cerrar Sesion</a></li>
+                <li>
+                  <form action="{% url 'logout' %}" method="POST" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-item">Cerrar sesión</button>
+                  </form>
+                </li>
                 <li><a class="dropdown-item" href="#">Pendiente</a></li>
                 <li><hr class="dropdown-divider" /></li>
                 <li>

@@ -6,12 +6,11 @@ from .models import Transaction, SaldosTransaccion
 def create_transaction(request):
     if request.method == 'POST':
         form = TransactionForm(request.POST)
-        form2 = SaldosTransaccionForm(request.POST)
+        #form2 = SaldosTransaccionForm(request.POST)
 
-        if form.is_valid() and form2.is_valid():
+        if form.is_valid():
 
-            transaction = form.save() 
-            transaction2 = form2.save() # Guarda la transacción
+            transaction = form.save()  # Guarda la transacción
             saldos_data = request.POST.getlist('saldos')
             
             for saldo in saldos_data:
@@ -21,7 +20,7 @@ def create_transaction(request):
                 fecha = saldo.get('fecha')  # Fecha del saldo
 
                 # Llama al método para registrar el saldo
-                transaction2.registrar_saldo(id_cuenta, monto, tipo, fecha)
+                transaction.registrar_saldo(id_cuenta, monto, tipo, fecha)
                 
             return redirect('create_transaction')  # Redirige a la misma página para registrar otra transacción
     else:

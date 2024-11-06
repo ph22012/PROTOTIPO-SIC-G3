@@ -41,7 +41,7 @@ def transacciones(request):
     return render(request, 'rtransacciones.html')
 
 
-"""def create_transaction(request):
+def create_transaction(request):
     if request.method == 'POST':
         form = TransactionForm(request.POST)
         if form.is_valid():
@@ -61,4 +61,5 @@ def transacciones(request):
             return redirect('create_transaction')  # Redirige a la misma página para registrar otra transacción
     else:
         form = TransactionForm()
-    return render(request, 'create_transaction.html', {'form': form})"""
+    return render(request, 'create_transaction.html', {'form': form})
+"""

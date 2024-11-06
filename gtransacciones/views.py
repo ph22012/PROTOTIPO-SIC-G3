@@ -27,7 +27,7 @@ def create_transaction(request):
     else:
         form = TransactionForm()
 
-    return render(request, 'create_transaction.html', {'form': form,'form2':form2} )
+    return render(request, 'create_transaction.html', {'form': form} )
 
 
 

@@ -1,13 +1,41 @@
-{% extends 'layouts/base.html'%}
+{% extends 'layouts/base.html'%} {% block content %}
+<div class="container align-content-center">
+  <div class="row mx-3" style="margin-top: 50px">
+    <h2 class="text-center col-12">Gestion Expert S.A de C.V</h2>
+    <h4 class="text-center col-12">Balance General</h4>
+    <h4 class="text-center col-12">
+      del {{periodoActual.fechaInicio|date:"d/m"}} al
+      {{periodoActual.fechaFin|date:"d/m"}} del
+      {{periodoActual.fechaInicio|date:"Y"}}
+    </h4>
+  </div>
+  <div style="margin-top: 40px">
+    <table class="table">
+      <thead>
+        <tr style="background-color: lightblue">
+          <th scope="col text-center">Codigo</th>
+          <th scope="col">Cuenta</th>
+          <th scope="col">Debe</th>
+          <th scope="col">Haber</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for saldo in saldosGeneral %}
 
-{% block content %}
-    <div class="container align-content-center">
-
-        <div class=" row mx-3" style="margin-top: 50px">
-            <h2 class="text-center col-12"> Gestion Expert S.A de C.V </h2>
-            <h4 class="text-center col-12"> Balance General </h4>
-            <h4 class="text-center col-12"> del {{periodoActual.fechaInicio|date:"d/m"}} al {{periodoActual.fechaFin|date:"d/m"}} del {{periodoActual.fechaInicio|date:"Y"}} </h4>
-        </div>
-
-    </div>
+        <tr>
+          <td>{{saldo.idCuenta.codCuenta}}</td>
+          <td>{{saldo.idCuenta.nameCuenta}}</td>
+          <td>{{saldo.debe}}</td>
+          <td>{{saldo.haber}}</td>
+        </tr>
+        {% endfor%}
+        <tr style="background-color: gray">
+          <td colspan="2" class="fw-bold">Total</td>
+          <td class="fw-bold">{{sumDebe}}</td>
+          <td class="fw-bold">{{sumHaber}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 {%endblock%}

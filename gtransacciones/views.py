@@ -1,7 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .forms import TransactionForm, SaldosTransaccionForm
 from .models import Transaction, SaldosTransaccion
-
+@login_required
 def create_transaction(request):
     if request.method == 'POST':
         form = TransactionForm(request.POST)

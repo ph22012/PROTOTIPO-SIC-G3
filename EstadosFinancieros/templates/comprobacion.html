@@ -11,7 +11,7 @@
     <div style="margin-top:40px ;">
         <table class="table">
             <thead>
-                <tr>
+                <tr style="background-color: lightblue;">
                     <th scope="col text-center"> Codigo</th>
                     <th scope="col"> Cuenta</th>
                     <th scope="col"> Debe</th>
@@ -28,11 +28,12 @@
                             <td>{{saldo.haber}}</td>
                         </tr>
                 {% endfor%}
-                        <tr>
+                        <tr style="background-color: gray;">
                             <td colspan="2" class="fw-bold">Total</td>
                             <td class="fw-bold">{{sumDebe}}</td>
                             <td class="fw-bold">{{sumHaber}}</td>
                         </tr>
+                        
             </tbody>
         </table>
     </div>

@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .forms import TransactionForm, SaldosTransaccionForm
+from .forms import TransactionForm
 from .models import Transaction, SaldosTransaccion, Cuenta
 
 @login_required
@@ -10,32 +10,26 @@ def create_transaction(request):
         form = TransactionForm(request.POST)
         if form.is_valid():
             transaction = form.save()
-            saldos_data = []
-            saldo_count = len(request.POST.getlist('saldos[0][idCuenta]'))
-            
-            for i in range(saldo_count):
-                saldo = {
-                    'idCuenta': request.POST.getlist(f'saldos[{i}][idCuenta]')[0],
-                    'monto': request.POST.getlist(f'saldos[{i}][monto]')[0],
-                    'tipo': request.POST.getlist(f'saldos[{i}][tipo]')[0],
-                    'fecha': request.POST.getlist(f'saldos[{i}][fecha]')[0]
-                }
-                saldos_data.append(saldo)
 
-            for saldo in saldos_data:
+            # Obtiene todas las listas de datos enviados del formulario
+            cuentas_list = request.POST.getlist('idCuenta')
+            montos_list = request.POST.getlist('monto')
+            tipos_list = request.POST.getlist('tipo')
+            fechas_list = request.POST.getlist('fecha')
+
+            # Itera a través de las listas de saldos y crea cada registro
+            for cuenta, monto, tipo, fecha in zip(cuentas_list, montos_list, tipos_list, fechas_list):
                 SaldosTransaccion.objects.create(
                     idTransaccion=transaction,
-                    idCuenta_id=saldo['idCuenta'],
-                    monto_cargo=saldo['monto'] if saldo['tipo'] == 'cargo' else 0,
-                    monto_haber=saldo['monto'] if saldo['tipo'] == 'haber' else 0,
-                    fecha=saldo['fecha']
+                    idCuenta_id=cuenta,
+                    monto_cargo=monto if tipo == 'cargo' else 0,
+                    monto_haber=monto if tipo == 'haber' else 0,
+                    fecha=fecha
                 )
             return redirect('create_transaction')
     else:
         form = TransactionForm()
     return render(request, 'create_transaction.html', {'form': form, 'cuentas': cuentas})
-
-
 
 """
 ULTIMO CODIGO ACTUALIZADO OFICIAL

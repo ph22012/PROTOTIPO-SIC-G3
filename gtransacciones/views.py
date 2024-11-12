@@ -2,10 +2,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .forms import TransactionForm
 from .models import Transaction, SaldosTransaccion, Cuenta
+from catalogocuentas.models import SaldosCuentas
 
 @login_required
 def create_transaction(request):
     cuentas = Cuenta.objects.all()
+    saldosCuentas = SaldosCuentas.objects.all()
     if request.method == 'POST':
         form = TransactionForm(request.POST)
         if form.is_valid():
@@ -26,6 +28,9 @@ def create_transaction(request):
                     monto_haber=monto if tipo == 'haber' else 0,
                     fecha=fecha
                 )
+
+                #for saldo in SaldosCuentas:
+                 #   if 
             return redirect('create_transaction')
     else:
         form = TransactionForm()

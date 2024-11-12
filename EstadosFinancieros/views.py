@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from datetime import date
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import periodos, estadosFinancieros
 from catalogocuentas.models import SaldosCuentas
 
@@ -10,11 +10,39 @@ def gestionar(request):
     fechaHoy = date.today();
     periodosContables = periodos.objects.all()
     periodoActual = None
-    for periodo in periodosContables:
-        if fechaHoy >= periodo.fechaInicio and fechaHoy <= periodo.fechaFin:
-            periodoActual = periodo
-            break
-    return render(request, 'gestion.html', {'periodoActual':periodoActual})
+    if request.method == 'POST':
+        selected = request.POST.get('seleccion')
+        request.session['periodoSelected'] = selected
+        return redirect('/gestionar')
+    else:
+        if request.session['periodoSelected'] != None:
+            print('vamosbien')
+            print(request.session['periodoSelected'])
+            for periodo in periodosContables:
+                if str(periodo.idPeriodo) == request.session['periodoSelected']:
+                    periodoActual = periodo
+                    print(periodoActual)
+                    print(periodo)
+                    
+                else:
+                    print('iteracion' + str(periodo.idPeriodo))
+                    print('no hay pipipi')
+        else:
+             for periodo in periodosContables:
+                if fechaHoy >= periodo.fechaInicio and fechaHoy <= periodo.fechaFin:
+                  periodoActual = periodo
+                break
+
+            
+    #else:
+     #   request.session['periodoSelected'] = 
+
+
+    #for periodo in periodosContables:
+    #    if fechaHoy >= periodo.fechaInicio and fechaHoy <= periodo.fechaFin:
+    #        periodoActual = periodo
+    #        break
+    return render(request, 'gestion.html', {'periodoActual':periodoActual, 'periodos':periodosContables})
 
 def comprobacion(request):
     fechaHoy = date.today();

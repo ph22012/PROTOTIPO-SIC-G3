@@ -33,19 +33,10 @@ def gestionar(request):
                   periodoActual = periodo
                 break
 
-            
-    #else:
-     #   request.session['periodoSelected'] = 
-
-
-    #for periodo in periodosContables:
-    #    if fechaHoy >= periodo.fechaInicio and fechaHoy <= periodo.fechaFin:
-    #        periodoActual = periodo
-    #        break
     return render(request, 'gestion.html', {'periodoActual':periodoActual, 'periodos':periodosContables})
 
 def comprobacion(request):
-    fechaHoy = date.today();
+    #fechaHoy = date.today();
     periodosContables = periodos.objects.all()
     periodoActual = None
     saldosAll = SaldosCuentas.objects.all()
@@ -53,7 +44,7 @@ def comprobacion(request):
     sumHaber =0
 
     for periodo in periodosContables:
-        if fechaHoy >= periodo.fechaInicio and fechaHoy <= periodo.fechaFin:
+        if periodo.idPeriodo == int(request.session['periodoSelected']):
             periodoActual = periodo
             break
     

@@ -89,10 +89,14 @@ WSGI_APPLICATION = 'PrototipoSic.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'sic2024',
+        'USER': 'sic2024',
+        "PASSWORD": "Ap49dZEBhXGb9E7K9nfcfyS4ZFxYdbgY",
+        "HOST": "dpg-cspakbogph6c73cvcbl0-a",
+        "PORT": "5432",
     }
-}
+} 
 
 
 # Password validation

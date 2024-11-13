@@ -11,54 +11,80 @@
 </head>
 <body>
     <div class="container mt-5">
-        <div class="d-flex justify-content-center align-items-center flex-column">
-            <h2 class="text-center">Registrar Transacción</h2>
-            
-            <form method="post" action="">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <div id="saldos-container" class="w-100">
-                    <h4>Saldos</h4>
-                    <div class="input-group mb-3 saldo-item">
+        <div class="card shadow">
+            <div class="card-body">
+                <h2 class="text-center mb-4">Registrar Transacción</h2>
+                
+                <form method="post" action="">
+                    {% csrf_token %}
+                    
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="fecha">Fecha:</label>
+                            <input type="date" name="fecha" id="fecha" class="form-control" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="descripcion">Descripción:</label>
+                            <input type="text" name="descripcion" id="descripcion" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <h4 class="mt-4">Saldos</h4>
+                    <div id="saldos-container">
+                        <div class="form-row align-items-center mb-2 saldo-item">
+                            <div class="col-md-4">
+                                <select name="idCuenta" class="form-control" required>
+                                    {% for cuenta in cuentas %}
+                                        <option value="{{ cuenta.idCuenta }}">{{ cuenta.nameCuenta }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="number" name="monto" class="form-control" placeholder="Monto" required>
+                            </div>
+                            <div class="col-md-4">
+                                <select name="tipo" class="form-control" required>
+                                    <option value="cargo">Cargo</option>
+                                    <option value="haber">Haber</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <button type="button" id="add-saldo" class="btn btn-outline-secondary">Agregar Saldo</button>
+                        <button type="submit" class="btn btn-primary">Guardar Transacción</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('add-saldo').onclick = function() {
+            const container = document.getElementById('saldos-container');
+            const newSaldo = `
+                <div class="form-row align-items-center mb-2 saldo-item">
+                    <div class="col-md-4">
                         <select name="idCuenta" class="form-control" required>
                             {% for cuenta in cuentas %}
                                 <option value="{{ cuenta.idCuenta }}">{{ cuenta.nameCuenta }}</option>
                             {% endfor %}
                         </select>
+                    </div>
+                    <div class="col-md-4">
                         <input type="number" name="monto" class="form-control" placeholder="Monto" required>
+                    </div>
+                    <div class="col-md-4">
                         <select name="tipo" class="form-control" required>
                             <option value="cargo">Cargo</option>
                             <option value="haber">Haber</option>
                         </select>
-                        <input type="date" name="fecha" class="form-control" required>
                     </div>
-                </div>
-                <button type="button" id="add-saldo" class="btn btn-secondary mb-3">Agregar Saldo</button>
-                <button type="submit" class="btn btn-primary">Guardar Transacción</button>
-            </form>
-        </div>
-
-        <script>
-            document.getElementById('add-saldo').onclick = function() {
-                const container = document.getElementById('saldos-container');
-                const newSaldo = `<div class="input-group mb-3 saldo-item">
-                    <select name="idCuenta" class="form-control" required>
-                        {% for cuenta in cuentas %}
-                            <option value="{{ cuenta.idCuenta }}">{{ cuenta.nameCuenta }}</option>
-                        {% endfor %}
-                    </select>
-                    <input type="number" name="monto" class="form-control" placeholder="Monto" required>
-                    <select name="tipo" class="form-control" required>
-                        <option value="cargo">Cargo</option>
-                        <option value="haber">Haber</option>
-                    </select>
-                    <input type="date" name="fecha" class="form-control" required>
                 </div>`;
-                container.insertAdjacentHTML('beforeend', newSaldo);
-            }
-        </script>
-    </div>
+            container.insertAdjacentHTML('beforeend', newSaldo);
+        }
+    </script>
 </body>
 </html>
 {% endblock %}
-

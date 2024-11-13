@@ -15,16 +15,16 @@ def create_transaction(request):
             cuentas_list = request.POST.getlist('idCuenta')
             montos_list = request.POST.getlist('monto')
             tipos_list = request.POST.getlist('tipo')
-            fechas_list = request.POST.getlist('fecha')
+            #fechas_list = request.POST.getlist('fecha')
 
             # Itera a través de las listas de saldos y crea cada registro
-            for cuenta, monto, tipo, fecha in zip(cuentas_list, montos_list, tipos_list, fechas_list):
+            for cuenta, monto, tipo in zip(cuentas_list, montos_list, tipos_list):
                 SaldosTransaccion.objects.create(
                     idTransaccion=transaction,
                     idCuenta_id=cuenta,
                     monto_cargo=monto if tipo == 'cargo' else 0,
                     monto_haber=monto if tipo == 'haber' else 0,
-                    fecha=fecha
+                    #fecha=fecha
                 )
             return redirect('create_transaction')
     else:

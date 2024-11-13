@@ -1,0 +1,29 @@
+{% extends 'layouts/base.html'%}
+
+{% block content %}
+    <div class="container align-content-center">
+
+        <div class=" row mx-3" style="margin-top: 50px">
+            <h2 class="text-center col-12"> Gestion Expert S.A de C.V </h2>
+            <h4 class="text-center col-12"> Registro de ajustes </h4>
+            <h4 class="text-center col-12"> del {{periodoActual.fechaInicio|date:"d/m"}} al {{periodoActual.fechaFin|date:"d/m"}} del {{periodoActual.fechaInicio|date:"Y"}} </h4>
+        </div>
+        
+        <div style="margin-top: 40px;">
+            <table class="table w-100">
+                <thead>
+                    <tr>
+                        <th scope="col" rowspan="2">Codigo</th>
+                        <th scope="col" rowspan="2">Cuenta</th>
+                        <th scope="col" colspan="2">Comprobacion</th>
+                        <th scope="col" colspan="2">Ajustes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+{%endblock%}

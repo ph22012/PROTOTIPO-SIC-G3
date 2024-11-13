@@ -60,6 +60,10 @@ def comprobacion(request):
     
     return render(request, 'comprobacion.html', {'periodoActual':periodoActual, 'saldosComprobacion':saldosComprobacion, 'sumDebe':sumDebe,'sumHaber':sumHaber})
 
+def ajustes(request):
+
+    return render(request, 'ajustes.html')
+
 def general(request):
     fechaHoy = date.today();
     periodosContables = periodos.objects.all()

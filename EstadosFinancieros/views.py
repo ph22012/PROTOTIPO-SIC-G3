@@ -10,7 +10,7 @@ def gestionar(request):
     fechaHoy = date.today();
     periodosContables = periodos.objects.all()
     periodoActual = None
-    request.session['periodoSelected']
+    request.session['periodoSelected'] = 2
     if request.method == 'POST':
         selected = request.POST.get('seleccion')
         request.session['periodoSelected'] = selected

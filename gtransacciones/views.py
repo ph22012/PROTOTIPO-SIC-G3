@@ -2,11 +2,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from .forms import TransactionForm
-from .models import Transaction, SaldosTransaccion, Cuenta
+from .models import Transaction, SaldosTransaccion#, Cuenta
+from catalogocuentas.models import SaldosCuentas, Cuenta
+from EstadosFinancieros.models import periodos, estadosFinancieros
+from decimal import Decimal
 
 @login_required
 def create_transaction(request):
     cuentas = Cuenta.objects.all()
+    #saldosCuentas = SaldosCuentas.objects.all()
     if request.method == 'POST':
         form = TransactionForm(request.POST)
         if form.is_valid():
@@ -20,6 +24,16 @@ def create_transaction(request):
 
 
             for cuenta, monto, tipo in zip(cuentas_list, montos_list, tipos_list):
+            # Itera a través de las listas de saldos y crea cada registro
+                cuentaAct = Cuenta.objects.get(pk=cuenta)
+                period = periodos.objects.get(idPeriodo = int(request.session['periodoSelected']))
+                estadoComprobacion = estadosFinancieros.objects.get(idEstado=1)
+                
+                #for account in cuentas:
+                #    if account.idCuenta == cuentaAct.idCuenta:
+                #        cuentaAct = account
+                #        print('La encontre')
+
                 SaldosTransaccion.objects.create(
                     idTransaccion=transaction,
                     idCuenta_id=cuenta,
@@ -28,6 +42,26 @@ def create_transaction(request):
                     #fecha=fecha
                 )
             messages.success(request, '¡La transacción se ha registrado con éxito!')
+                saldo = SaldosCuentas.objects.filter(idCuenta = cuentaAct.idCuenta, idEstado = estadoComprobacion.idEstado).first()                        
+                if saldo != None :
+                    print('si existe')
+                    saldo.debe +=  Decimal(monto if tipo == 'cargo' else 0)
+                    saldo.haber += Decimal(monto if tipo == 'haber' else 0)
+                    #saldo.fechaSaldo = fecha
+                    saldo.esFinal = False
+                    saldo.idPeriodo = period
+                    saldo.save()
+                else :
+                    print('No se encontro, se creo otro')
+                    SaldosCuentas.objects.create(
+                        debe = monto if tipo == 'cargo' else 0,
+                        haber = monto if tipo == 'haber' else 0,
+                        #fechaSaldo = fecha,
+                        esFinal = False,
+                        idCuenta = cuentaAct,
+                        idEstado = estadoComprobacion,
+                        idPeriodo = period
+                    )
             return redirect('create_transaction')
     else:
         form = TransactionForm()

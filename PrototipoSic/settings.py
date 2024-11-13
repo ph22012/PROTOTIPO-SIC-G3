@@ -93,14 +93,7 @@ WSGI_APPLICATION = 'PrototipoSic.wsgi.application'
 #}
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'prueba',
-        'USER': 'postgres',
-        "PASSWORD": "postgres",
-        "HOST": "localhost",
-        "PORT": "5432",
-    }
+    'default': dj_database_url.parse("postgresql://sic2024:5oHHbhqjr2FplPaGifXwsQYUnmYlPKsd@dpg-csqg5v23esus73crvio0-a/sic2024_61pg")
 }
 
 # Password validation

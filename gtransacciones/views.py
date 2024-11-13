@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from .forms import TransactionForm
 from .models import Transaction, SaldosTransaccion, Cuenta
@@ -11,13 +12,13 @@ def create_transaction(request):
         if form.is_valid():
             transaction = form.save()
 
-            # Obtiene todas las listas de datos enviados del formulario
+
             cuentas_list = request.POST.getlist('idCuenta')
             montos_list = request.POST.getlist('monto')
             tipos_list = request.POST.getlist('tipo')
             #fechas_list = request.POST.getlist('fecha')
 
-            # Itera a través de las listas de saldos y crea cada registro
+
             for cuenta, monto, tipo in zip(cuentas_list, montos_list, tipos_list):
                 SaldosTransaccion.objects.create(
                     idTransaccion=transaction,
@@ -26,6 +27,7 @@ def create_transaction(request):
                     monto_haber=monto if tipo == 'haber' else 0,
                     #fecha=fecha
                 )
+            messages.success(request, '¡La transacción se ha registrado con éxito!')
             return redirect('create_transaction')
     else:
         form = TransactionForm()

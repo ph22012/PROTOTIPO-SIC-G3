@@ -12,7 +12,7 @@ class Cuenta(models.Model):
 
     class Meta:
         db_table = 'cuentas'
-        managed = False  # Si la tabla es externa, puedes desactivar el manejo de la migración
+        managed = False  
 
     def __str__(self):
         return self.nameCuenta

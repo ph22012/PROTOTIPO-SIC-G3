@@ -12,7 +12,7 @@ class Cuenta(models.Model):
 
     class Meta:
         db_table = 'cuentas'
-        managed = False  # Si la tabla es externa, puedes desactivar el manejo de la migración
+        managed = False  
 
     def __str__(self):
         return self.nameCuenta
@@ -21,8 +21,9 @@ class Cuenta(models.Model):
 # Modelo de Registro de Transacción
 class Transaction(models.Model):
     idTransaccion = models.AutoField(primary_key=True)
-    descripcion = models.CharField(max_length=200)
     fecha = models.DateField()
+    descripcion = models.CharField(max_length=200)
+
 
     class Meta:
         db_table = 'gtransacciones_transaction'
@@ -39,7 +40,7 @@ class SaldosTransaccion(models.Model):
     idTransaccion = models.ForeignKey('Transaction', on_delete=models.CASCADE)
     monto_cargo = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     monto_haber = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    fecha = models.DateField()
+    #fecha = models.DateField()
 
     class Meta:
         db_table = 'gtransacciones_saldostransaccion'
@@ -47,12 +48,12 @@ class SaldosTransaccion(models.Model):
     def __str__(self):
         return f'Saldo {self.idSaldoTransaccion} - Cuenta: {self.idCuenta}'
     
-    def registrar_saldo(self, id_cuenta, monto, tipo, fecha):
+    def registrar_saldo(self, id_cuenta, monto, tipo):
         saldo_transaccion = SaldosTransaccion(
             idCuenta=id_cuenta,
             monto = monto,
             idTransaccion=self,
-            fecha=fecha
+            #fecha=fecha
         )
         if tipo.lower() == 'cargo':
             saldo_transaccion.monto_cargo = monto

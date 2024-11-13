@@ -12,7 +12,7 @@ class SaldosTransaccionForm(forms.ModelForm):
 
     class Meta:
         model = SaldosTransaccion
-        fields = ['idCuenta', 'monto_cargo', 'monto_haber', 'fecha']
+        fields = ['idCuenta', 'monto_cargo', 'monto_haber']
 
 
 # Formulario para Transaction

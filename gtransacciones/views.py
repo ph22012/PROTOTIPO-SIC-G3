@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from .forms import TransactionForm
 from .models import Transaction, SaldosTransaccion#, Cuenta
@@ -13,17 +14,17 @@ def create_transaction(request):
     if request.method == 'POST':
         form = TransactionForm(request.POST)
         if form.is_valid():
+            fecha = form.cleaned_data['fecha']
             transaction = form.save()
 
-            # Obtiene todas las listas de datos enviados del formulario
+
             cuentas_list = request.POST.getlist('idCuenta')
             montos_list = request.POST.getlist('monto')
             tipos_list = request.POST.getlist('tipo')
-            fechas_list = request.POST.getlist('fecha')
+            #fechas_list = request.POST.getlist('fecha')
 
+            for cuenta, monto, tipo in zip(cuentas_list, montos_list, tipos_list):
             # Itera a través de las listas de saldos y crea cada registro
-            for cuenta, monto, tipo, fecha in zip(cuentas_list, montos_list, tipos_list, fechas_list):
-                
                 cuentaAct = Cuenta.objects.get(pk=cuenta)
                 period = periodos.objects.get(idPeriodo = int(request.session['periodoSelected']))
                 estadoComprobacion = estadosFinancieros.objects.get(idEstado=1)
@@ -38,8 +39,9 @@ def create_transaction(request):
                     idCuenta_id=cuenta,
                     monto_cargo=monto if tipo == 'cargo' else 0,
                     monto_haber=monto if tipo == 'haber' else 0,
-                    fecha=fecha
+                    #fecha=fecha
                 )
+                messages.success(request, '¡La transacción se ha registrado con éxito!')
                 saldo = SaldosCuentas.objects.filter(idCuenta = cuentaAct.idCuenta, idEstado = estadoComprobacion.idEstado).first()                        
                 if saldo != None :
                     print('si existe')
@@ -60,7 +62,6 @@ def create_transaction(request):
                         idEstado = estadoComprobacion,
                         idPeriodo = period
                     )
-             
             return redirect('create_transaction')
     else:
         form = TransactionForm()

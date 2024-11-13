@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'PrototipoSic.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.parse("postgresql://sic2024:5oHHbhqjr2FplPaGifXwsQYUnmYlPKsd@dpg-csqg5v23esus73crvio0-a/sic2024_61pg)")
+    'default': dj_database_url.parse("postgresql://sic2024:5oHHbhqjr2FplPaGifXwsQYUnmYlPKsd@dpg-csqg5v23esus73crvio0-a/sic2024_61pg")
 }
 
 #DATABASES = {

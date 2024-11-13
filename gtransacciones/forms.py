@@ -1,4 +1,36 @@
 from django import forms
+from .models import Transaction, SaldosTransaccion, Cuenta
+
+# Formulario para SaldosTransaccion
+class SaldosTransaccionForm(forms.ModelForm):
+    # Cambiar el campo idCuenta para que sea un campo de tipo ModelChoiceField
+    idCuenta = forms.ModelChoiceField(
+        queryset=Cuenta.objects.all(),  # Obtener todas las cuentas de la base de datos
+        empty_label="Seleccione una cuenta",  # Mensaje por defecto si no hay cuenta seleccionada
+        widget=forms.Select(attrs={'class': 'form-control'})  # Opcional: estilo del campo
+    )
+
+    class Meta:
+        model = SaldosTransaccion
+        fields = ['idCuenta', 'monto_cargo', 'monto_haber', 'fecha']
+
+
+# Formulario para Transaction
+class TransactionForm(forms.ModelForm):
+    class Meta:
+        model = Transaction
+        fields = ['fecha', 'descripcion']
+
+
+# Crear un formset para los saldos
+from django.forms import modelformset_factory
+SaldosTransaccionFormSet = modelformset_factory(SaldosTransaccion, form=SaldosTransaccionForm, extra=1)
+
+"""
+************************************************************************
+ULTIMO CODIGO ACTUALIZADO OFICIAL 
+
+from django import forms
 from .models import Transaction, SaldosTransaccion
 
 class SaldosTransaccionForm(forms.ModelForm):
@@ -16,8 +48,8 @@ class TransactionForm(forms.ModelForm):
 # Crear un formset para los saldos
 from django.forms import modelformset_factory
 SaldosTransaccionFormSet = modelformset_factory(SaldosTransaccion, form=SaldosTransaccionForm, extra=1)
-
-
+*************************************************************************************************************************
+"""
 
 
 

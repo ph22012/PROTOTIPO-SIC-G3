@@ -16,6 +16,7 @@ LOGOUT_REDIRECT_URL = 'login'
 
 from pathlib import Path
 import os
+import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -88,16 +89,19 @@ WSGI_APPLICATION = 'PrototipoSic.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'prueba',
-        'USER': 'postgres',
-        "PASSWORD": "postgres",
-        "HOST": "localhost",
-        "PORT": "5432",
-    }
+    'default': dj_database_url.parse("postgresql://sic2024:Ap49dZEBhXGb9E7K9nfcfyS4ZFxYdbgY@dpg-cspakbogph6c73cvcbl0-a/sic2024")
 }
 
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'sic2024',
+#        'USER': 'sic2024',
+#        "PASSWORD": "Ap49dZEBhXGb9E7K9nfcfyS4ZFxYdbgY",
+#        "HOST": "dpg-cspakbogph6c73cvcbl0-a",
+#        "PORT": "5432",
+#    }
+#} 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 

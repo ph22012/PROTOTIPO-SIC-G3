@@ -96,7 +96,7 @@ def resultados(request):
             break
     
     saldosPeriodo = saldosAll.filter(idPeriodo__idPeriodo=periodoActual.idPeriodo)
-    saldosResultado = saldosPeriodo.filter(idEstado__idTipoEstado=3)
+    saldosResultado = saldosPeriodo.filter(idEstado__idTipoEstado=1)
     
     ventasNetas = saldosResultado.filter(idCuenta__codCuenta__in=["5101", "4101","4102"])
     utilidadBruta = 0

@@ -10,6 +10,7 @@ from decimal import Decimal
 @login_required
 def create_transaction(request):
     cuentas = Cuenta.objects.all()
+    request.session['periodoSelected'] = "2"
     #saldosCuentas = SaldosCuentas.objects.all()
     if request.method == 'POST':
         form = TransactionForm(request.POST)

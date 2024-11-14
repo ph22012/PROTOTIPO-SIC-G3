@@ -7,5 +7,6 @@ urlpatterns = [
     path('gestionar/estado-resultado/', views.resultados),
     path('gestionar/balance-general/', views.general),
     path('gestionar/ajustes/', views.ajustes),
+    path('gestionar/balance_ajustado/', views.comprobacionAjustado),
     
 ]

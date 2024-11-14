@@ -1,0 +1,113 @@
+{% extends 'layouts/base.html'%}
+
+{% block content %}
+    <div class="container align-content-center">
+
+        <div class=" row mx-3" style="margin-top: 50px">
+            <h2 class="text-center col-12"> Gestion Expert S.A de C.V </h2>
+            <h4 class="text-center col-12"> Registro de ajustes </h4>
+            <h4 class="text-center col-12"> del {{periodoActual.fechaInicio|date:"d/m"}} al {{periodoActual.fechaFin|date:"d/m"}} del {{periodoActual.fechaInicio|date:"Y"}} </h4>
+        </div>
+    <form method="POST" action="">
+        
+        {% csrf_token %}
+        <div style="margin-top: 40px;">
+            <table class="table table-bordered w-100">
+                <thead>
+                    <tr>
+                        <th class="text-center align-content-center" scope="col" rowspan="2">Codigo</th>
+                        <th class="text-center align-content-center"  scope="col" rowspan="2">Cuenta</th>
+                        <th class="text-center" scope="col" colspan="2">Balance de comprobacion</th>
+                        <th class="text-center" scope="col" colspan="2">Ajustes</th>
+                        <th class="text-center" scope="col" colspan="2">Balance de comprobacion ajustado</th>
+                    </tr>
+
+                    <tr>
+                        <th class="text-center" scope="col">Debe</th>
+                        <th class="text-center" scope="col">Haber</th>
+                        <th class="text-center" scope="col">Debe</th>
+                        <th class="text-center" scope="col">Haber</th>
+                        <th class="text-center" scope="col">Debe</th>
+                        <th class="text-center" scope="col">Haber</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for dato in saldosSinAjustar%}
+                        <tr>
+                            <td class="text-center">{{dato.idCuenta.codCuenta}}</td>
+                            <td class="text-center">{{dato.idCuenta.nameCuenta}}</td>
+                            <td class="text-center">{{dato.debe}}</td>
+                            <td class="text-center">{{dato.haber}}</td>
+                            {%for dato2 in saldosAjustados%}
+                                {%if dato.idCuenta == dato2.idCuenta%}
+                                <td class="text-center">{{dato2.debe}}</td>
+                                <td class="text-center">{{dato2.haber}}</td>
+                                <td class="text-center"> Aqui luego calculo</td>
+                                <td class="text-center"> Aqui luego calculo</td>
+                                
+                                {%endif%}
+                            {%endfor%}
+                        </tr>
+                        {%endfor%}
+
+                    {%for saldo in saldosAjustados%}
+
+                    {%if saldo.idCuenta.codClase == 4 %}
+                    <tr>
+                        <td class="text-center">{{saldo.idCuenta.codCuenta}}</td>
+                        <td class="text-center">{{saldo.idCuenta.nameCuenta}}</td>
+                        <td class="text-center">0.00</td>
+                        <td class="text-center"> 0.00</td>
+                        
+                        <!-- Agregar el id del ajuste al nombre del input -->
+                        <td class="text-center">{{saldo.debe}}</td>
+                        <td class="text-center">{{saldo.haber}}</td>
+                        <td class="text-center"> Aqui luego calculo</td>
+                        <td class="text-center"> Aqui luego calculo</td>
+                    </tr>
+                    {%endif%}
+                    {%endfor%}
+                    <tr>
+                        <td colspan="2" class="text-center"> Total</td>
+                        <td>{{sumDebeComp}} </td>
+                        <td>{{sumHaberComp}} </td>
+                        <td id="totalDebe" class="text-center">0</td>
+                        <td id="totalHaber" class="text-center">0</td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="submit" class=" btn btn-primary mt-3">Guardar</button>
+
+        </div>
+    </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            const totalDebe = document.getElementById('totalDebe');
+            const totalHaber = document.getElementById('totalHaber');
+    
+            function updateTotals() {
+                let sumDebe = 0;
+                let sumHaber = 0;
+    
+                inputs.forEach(input => {
+                    const value = parseFloat(input.value) || 0;
+                    if (input.name.includes('Debito')) {
+                        sumDebe += value;
+                    } else if (input.name.includes('haber')) {
+                        sumHaber += value;
+                    }
+                });
+    
+                totalDebe.textContent = sumDebe.toFixed(2);
+                totalHaber.textContent = sumHaber.toFixed(2);
+            }
+    
+            inputs.forEach(input => {
+                input.addEventListener('input', updateTotals);
+            });
+        });
+    </script>
+{%endblock%}

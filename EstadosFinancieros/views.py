@@ -6,6 +6,8 @@ from catalogocuentas.models import SaldosCuentas, Cuenta
 from decimal import Decimal
 
 # Create your views here.
+
+#VISTA PRINCIPAL DE LISTA DE ESTADOS FINANCIEROS
 @login_required
 def gestionar(request):
     fechaHoy = date.today();
@@ -37,7 +39,7 @@ def gestionar(request):
                 break
 
     return render(request, 'gestion.html', {'periodoActual':periodoActual, 'periodos':periodosContables})
-
+#VISTA DEL BALANCE DE COMPROBACIÓN SIN AJUSTAR
 def comprobacion(request):
     #fechaHoy = date.today();
     periodosContables = periodos.objects.all()
@@ -60,15 +62,15 @@ def comprobacion(request):
 
     
     return render(request, 'comprobacion.html', {'periodoActual':periodoActual, 'saldosComprobacion':saldosComprobacion, 'sumDebe':sumDebe,'sumHaber':sumHaber})
-
+#VISTA DE LA VENTANA DE AJUSTES
 def ajustes(request):
     if 'periodoSelected' not in request.session:
         request.session['periodoSelected'] = "2"
-    balanceAjustado = estadosFinancieros.objects.get(idTipoEstado = 2, idPeriodo__idPeriodo = int(request.session['periodoSelected']))
+    balanceAjustes = estadosFinancieros.objects.get(idTipoEstado = 2, idPeriodo__idPeriodo = int(request.session['periodoSelected']))
+    balanceAjustado = estadosFinancieros.objects.get(idTipoEstado = 3, idPeriodo__idPeriodo = int(request.session['periodoSelected']))
+
     period = periodos.objects.get(idPeriodo = int(request.session['periodoSelected']))
     if request.method == 'POST':
-        ajustes = []
-        #print(request.POST)
         # Extraer los datos de cada campo
         for key, value in request.POST.items():
             if key.startswith('ajuste_Debito') or key.startswith('ajuste_haber'):
@@ -80,22 +82,43 @@ def ajustes(request):
                     saldo = SaldosCuentas.objects.filter(idCuenta = saldoAfectado.idCuenta, idEstado__idTipoEstado =2).first()
                     if saldo != None:
                         if parts[1]=="Debito" and value: 
-                            saldo.debe = saldoAfectado.debe + Decimal(value)
+                            saldo.debe = Decimal(value)
                         if parts[1]=='haber' and value:
-                            saldo.haber = saldoAfectado.haber + Decimal(value)
+                            saldo.haber = Decimal(value)
                         saldo.fechaSaldo = date.today()
                         saldo.esFinal = False
                         saldo.save()
                     else:
                         SaldosCuentas.objects.create(
-                            debe = (saldoAfectado.debe + Decimal(value)) if parts[1]=="Debito" and value else 0,
-                            haber = (saldoAfectado.debe + Decimal(value)) if parts[1]=="haber" and value else 0,
+                            debe = (Decimal(value)) if parts[1]=="Debito" and value else 0,
+                            haber = (Decimal(value)) if parts[1]=="haber" and value else 0,
                             fechaSaldo = date.today(),
                             esFinal = False,
                             idCuenta = saldoAfectado.idCuenta,
-                            idEstado = balanceAjustado,
+                            idEstado = balanceAjustes,
                             idPeriodo = period
-                    )
+                            )
+                        #Para el reporte
+                    saldoAjustado = SaldosCuentas.objects.filter(idCuenta = saldoAfectado.idCuenta, idEstado__idTipoEstado =3).first()
+                    if saldoAjustado != None:
+                        if parts[1]=="Debito" and value: 
+                            saldoAjustado.debe = saldoAfectado.debe + Decimal(value)
+                        if parts[1]=='haber' and value:
+                            saldoAjustado.haber = saldoAfectado.haber + Decimal(value)
+                        saldoAjustado.fechaSaldo = date.today()
+                        saldoAjustado.esFinal = False
+                        saldoAjustado.save()
+                    else:
+                        SaldosCuentas.objects.create(
+                        debe = (saldoAfectado.debe + Decimal(value)) if parts[1]=="Debito" and value else 0,
+                        haber = (saldoAfectado.haber + Decimal(value)) if parts[1]=="haber" and value else 0,
+                        fechaSaldo = date.today(),
+                        esFinal = False,
+                        idCuenta = saldoAfectado.idCuenta,
+                        idEstado = balanceAjustado,
+                        idPeriodo = period
+                        )
+                    
                 # Si es un campo de ajuste, el id está en la última posición (ajuste_debe_ajuste_1)
                 elif len(parts) == 4:
                     print('1- tipo: '+parts[1] )
@@ -113,13 +136,33 @@ def ajustes(request):
                     else:
                         SaldosCuentas.objects.create(
                             debe = (Decimal(value)) if parts[1]=="Debito" and value else 0,
-                            haber = Decimal(value) if parts[1]=="haber" and value else 0,
+                            haber = (Decimal(value)) if parts[1]=="haber" and value else 0,
                             fechaSaldo = date.today(),
                             esFinal = False,
                             idCuenta = cuentaAfectadaAjuste,
-                            idEstado = balanceAjustado,
+                            idEstado = balanceAjustes,
                             idPeriodo = period
                         )
+                    saldoAjustado = SaldosCuentas.objects.filter(idCuenta = cuentaAfectadaAjuste, idEstado__idTipoEstado =3).first()
+                    if saldoAjustado != None:
+                        if parts[1]=="Debito" and value: 
+                            saldoAjustado.debe = Decimal(value)
+                        if parts[1]=='haber' and value:
+                            saldoAjustado.haber = Decimal(value)
+                        saldoAjustado.fechaSaldo = date.today()
+                        saldoAjustado.esFinal = False
+                        saldoAjustado.save()
+                    else:
+                        SaldosCuentas.objects.create(
+                        debe = (Decimal(value)) if parts[1]=="Debito" and value else 0,
+                        haber = (Decimal(value)) if parts[1]=="haber" and value else 0,
+                        fechaSaldo = date.today(),
+                        esFinal = False,
+                        idCuenta = cuentaAfectadaAjuste,
+                        idEstado = balanceAjustado,
+                        idPeriodo = period
+                        )
+                            
 
     balanceComprobacion = SaldosCuentas.objects.filter(idPeriodo_id = int(request.session['periodoSelected']), idEstado__idTipoEstado = 1 )
     sumDebeComp = 0
@@ -131,6 +174,34 @@ def ajustes(request):
     
     return render(request, 'ajustes.html',{'sinAjustar':balanceComprobacion, 'cuentasAjustes': cuentasAjustes, 'sumDebeComp':sumDebeComp,'sumHaberComp':sumHaberComp})
 
+#VISTA DEL BALANCE DE COMPROBACION AJUSTADO
+def comprobacionAjustado(request):
+    if 'periodoSelected' not in request.session:
+        request.session['periodoSelected'] = '2'
+
+    cuentas = Cuenta.objects.all()
+    saldosSinAjustar = []
+    saldosAjustados = []
+    ajustes = []
+
+    for cuenta in cuentas:
+        #1° Saldo sin ajustar
+        saldoNoAjustado = SaldosCuentas.objects.filter(idCuenta = cuenta, idPeriodo_id = int(request.session['periodoSelected']), idEstado__idTipoEstado = 1).first()
+        if saldoNoAjustado != None:
+            saldosSinAjustar.append(saldoNoAjustado)
+        #2° Saldo ajustado
+        saldoAjustado = SaldosCuentas.objects.filter(idCuenta = cuenta, idPeriodo_id = int(request.session['periodoSelected']), idEstado__idTipoEstado = 2).first()
+        if saldoAjustado != None:
+            saldosAjustados.append(saldoAjustado)
+        #3° Como no se guardan los ajustes tal cual, se deben calcular
+
+
+    
+    
+
+    return render(request, 'comprobacion_Ajustado.html',{'saldosSinAjustar': saldosSinAjustar, 'saldosAjustados':saldosAjustados})
+
+#VISTA DEL BALANCE GENERAL
 def general(request):
     fechaHoy = date.today();
     periodosContables = periodos.objects.all()
@@ -154,6 +225,7 @@ def general(request):
     
     return render(request, 'general.html', {'periodoActual':periodoActual, 'saldosGeneral':saldosGeneral, 'sumDebe':sumDebe,'sumHaber':sumHaber})
 
+#VISTA DEL ESTADO DE RESULTADOS
 def resultados(request):
 
     fechaHoy = date.today();

@@ -68,49 +68,52 @@ def ajustes(request):
     period = periodos.objects.get(idPeriodo = int(request.session['periodoSelected']))
     if request.method == 'POST':
         ajustes = []
+        #print(request.POST)
         # Extraer los datos de cada campo
         for key, value in request.POST.items():
             if key.startswith('ajuste_Debito') or key.startswith('ajuste_haber'):
                 # Obtener el id de la cuenta o ajuste desde el nombre del campo
                 parts = key.split('_')
-                
-                print(parts[1])
                  # Si es un campo de cuenta, el id está en la penúltima posición (ajuste_debe_1)
                 if len(parts) == 3:
                     saldoAfectado = SaldosCuentas.objects.get(pk = int(parts[-1]))
-                    print(saldoAfectado) 
                     saldo = SaldosCuentas.objects.filter(idCuenta = saldoAfectado.idCuenta, idEstado__idTipoEstado =2).first()
                     if saldo != None:
-                        saldo.debe = saldoAfectado.debe + (Decimal(value) if parts[1]=='Debito' and value else 0)
-                        saldo.haber = saldoAfectado.haber + (Decimal(value) if parts[1]=='haber' and value else 0)
+                        if parts[1]=="Debito" and value: 
+                            saldo.debe = saldoAfectado.debe + Decimal(value)
+                        if parts[1]=='haber' and value:
+                            saldo.haber = saldoAfectado.haber + Decimal(value)
                         saldo.fechaSaldo = date.today()
                         saldo.esFinal = False
                         saldo.save()
                     else:
                         SaldosCuentas.objects.create(
-                        debe = saldoAfectado.debe + (Decimal(value) if value else 0),
-                        haber = saldoAfectado.haber + (Decimal(value) if value else 0),
-                        fechaSaldo = date.today(),
-                        esFinal = False,
-                        idCuenta = saldoAfectado.idCuenta,
-                        idEstado = balanceAjustado,
-                        idPeriodo = period
+                            debe = (saldoAfectado.debe + Decimal(value)) if parts[1]=="Debito" and value else 0,
+                            haber = (saldoAfectado.debe + Decimal(value)) if parts[1]=="haber" and value else 0,
+                            fechaSaldo = date.today(),
+                            esFinal = False,
+                            idCuenta = saldoAfectado.idCuenta,
+                            idEstado = balanceAjustado,
+                            idPeriodo = period
                     )
                 # Si es un campo de ajuste, el id está en la última posición (ajuste_debe_ajuste_1)
                 elif len(parts) == 4:
+                    print('1- tipo: '+parts[1] )
                     cuentaAfectadaAjuste = Cuenta.objects.get(pk = int(parts[-1]))
-                    print(str(value))
-                    saldo = SaldosCuentas.objects.filter(idCuenta__idCuenta = cuentaAfectadaAjuste.idCuenta, idEstado__idTipoEstado=2).first()
+                    print('2- monto: '+str(value))
+                    saldo = SaldosCuentas.objects.filter(idCuenta = cuentaAfectadaAjuste, idEstado__idTipoEstado=2).first()
                     if saldo != None:
-                        saldo.debe = Decimal(value) if parts[1]=='Debito' and value else 0
-                        saldo.haber = Decimal(value) if parts[1]=='haber' and value else 0
+                        if parts[1]=="Debito" and value:
+                            saldo.debe =  Decimal(value)
+                        if parts[1]=="haber" and value: 
+                            saldo.haber = Decimal(value) 
                         saldo.fechaSaldo = date.today()
                         saldo.esFinal = False
                         saldo.save()
                     else:
                         SaldosCuentas.objects.create(
-                            debe = (Decimal(value) if parts[1]=='Debito' and value else 0),
-                            haber = (Decimal(value) if parts[1]=='haber' and value else 0),
+                            debe = (Decimal(value)) if parts[1]=="Debito" and value else 0,
+                            haber = Decimal(value) if parts[1]=="haber" and value else 0,
                             fechaSaldo = date.today(),
                             esFinal = False,
                             idCuenta = cuentaAfectadaAjuste,
@@ -125,6 +128,7 @@ def ajustes(request):
         sumDebeComp += dato.debe
         sumHaberComp += dato.haber
     cuentasAjustes = Cuenta.objects.filter(codClase = 4)
+    
     return render(request, 'ajustes.html',{'sinAjustar':balanceComprobacion, 'cuentasAjustes': cuentasAjustes, 'sumDebeComp':sumDebeComp,'sumHaberComp':sumHaberComp})
 
 def general(request):

@@ -45,18 +45,19 @@
                               
                         </tr>
                     {%endfor%}
-                    {%for dato in cuentasAjustes%}
+
+                    {%for cuenta in cuentasAjustes%}
                     <tr>
-                        <td class="text-center">{{dato.codCuenta}}</td>
-                        <td class="text-center">{{dato.nameCuenta}}</td>
+                        <td class="text-center">{{cuenta.codCuenta}}</td>
+                        <td class="text-center">{{cuenta.nameCuenta}}</td>
                         <td></td>
                         <td></td>
                         <!-- Agregar el id del ajuste al nombre del input -->
                         <td class="text-center">
-                            <input type="number" name="ajuste_Debito_ajuste_{{ dato.idCuenta }}" class="form-control" value="0">
+                            <input type="number" name="ajuste_Debito_ajuste_{{cuenta.idCuenta}}" class="form-control" value="0">
                         </td>
                         <td class="text-center">
-                            <input type="number" name="ajuste_haber_ajuste_{{ dato.idCuenta }}" class="form-control" value="0">
+                            <input type="number" name="ajuste_haber_ajuste_{{cuenta.idCuenta}}" class="form-control" value="0">
                         </td>
                     </tr>
                     {%endfor%}
@@ -87,7 +88,7 @@
     
                 inputs.forEach(input => {
                     const value = parseFloat(input.value) || 0;
-                    if (input.name.includes('debe')) {
+                    if (input.name.includes('Debito')) {
                         sumDebe += value;
                     } else if (input.name.includes('haber')) {
                         sumHaber += value;

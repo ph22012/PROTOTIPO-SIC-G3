@@ -41,7 +41,7 @@ def create_transaction(request):
                     monto_haber=monto if tipo == 'haber' else 0,
                     #fecha=fecha
                 )
-            messages.success(request, '¡La transacción se ha registrado con éxito!')
+                messages.success(request, '¡La transacción se ha registrado con éxito!')
                 saldo = SaldosCuentas.objects.filter(idCuenta = cuentaAct.idCuenta, idEstado = estadoComprobacion.idEstado).first()                        
                 if saldo != None :
                     print('si existe')

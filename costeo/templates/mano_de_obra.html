@@ -1,0 +1,22 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Costo Total Mano de Obra</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <h2>COSTO TOTAL DE MANO DE OBRA</h2>
+    <ul>
+        <li>Cantidad de horas por trabajador: {{ horasTrabajadas }}</li>
+        <li>Costo real JUNIOR por proyecto: ${{ costoJunior }}</li>
+        <li>Costo real SENIOR por proyecto: ${{ costoSenior }}</li>
+        <li>Costo total de mano de obra: ${{ manoDeObraCosto }}</li>
+    </ul>    
+</body>
+</html>
+{% endblock %}

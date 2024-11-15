@@ -75,6 +75,12 @@ class Costo(models.Model):
     def costo_total_mano_de_obra(self):
         costoTotalManoDeObra = (self.costoRealJunior() * Decimal(8)) + (self.costoRealSenior() * Decimal(2))
         return costoTotalManoDeObra
+
+class Cif(models.Model):
+    detalle = models.CharField(max_length=100)
+    monto = models.DecimalField(max_digits=10,decimal_places=2)
+    idProyecto = models.ForeignKey('Proyecto', on_delete=models.CASCADE)
+
 class Proyecto(models.Model):
     nombre = models.CharField(max_length=200)
     imagen = models.CharField(max_length=200)  # El nombre de la imagen o el path relativo

@@ -2,7 +2,7 @@
 
 from django.shortcuts import render, redirect
 from .forms import CostoForm, EmpleadoForm
-from .models import Costo, Empleado, Proyecto
+from .models import Costo, Empleado, Cif, Proyecto
 from decimal import Decimal
 
 # Vista para registrar empleado
@@ -80,6 +80,40 @@ def manoDeObra(request):
         'manoDeObraCosto': manoDeObraCosto,
     })
 
+
+def seleccionar_Cif(request):
+    return render(request, 'select_cif.html')
+
+def costos_indirectos(request):
+    cifAnteriores = Cif.objects.filter(idProyecto=1)
+    proyectoAnterior = Proyecto.objects.filter(id = 1).first()
+    proyectoCosteo = Proyecto.objects.filter(id = 2).first()
+    cifActuales = []
+    factor = 2800 / proyectoAnterior.horas_totales 
+    sumOriginal = 0
+    sumAdecuada = 0
+    #factor = proyectoCosteo.horas_totales/ proyectoAnterior.horas_totales 
+    for cif in cifAnteriores:
+        cifNuevo = Cif()
+        cifNuevo.detalle = cif.detalle
+        cifNuevo.monto = cif.monto * Decimal(factor)
+        cifNuevo.idProyecto = proyectoCosteo
+        sumOriginal += cif.monto
+        sumAdecuada += cifNuevo.monto
+        cifActuales.append(cifNuevo)
+    
+    for cif in cifActuales:
+        cifProyecto = Cif.objects.filter(idProyecto = 2, detalle = cif.detalle, monto =cif.monto).first()
+        if cifProyecto != None:
+            cifProyecto = cif
+            cifProyecto.save()
+        else:
+            Cif.objects.create(cifProyecto)
+
+
+
+    return render(request, 'costos_indirectos.html',{'cifOriginales':cifAnteriores,'cifActuales':cifActuales,'factor':factor,'sumOriginal':sumOriginal,'sumAdecuada':sumAdecuada})
+
 def proyectos_view(request):
     proyectos = Proyecto.objects.all() 
     return render(request, 'proyecto.html', {'proyectos': proyectos})
@@ -93,3 +127,4 @@ def proyecto_detalle(request, proyecto_id):
         'proyecto': proyecto,
         'empleados': empleados,
     })
+

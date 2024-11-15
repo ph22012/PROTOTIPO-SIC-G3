@@ -14,6 +14,7 @@ def create_transaction(request):
     if request.method == 'POST':
         form = TransactionForm(request.POST)
         if form.is_valid():
+            fecha = form.cleaned_data['fecha']
             transaction = form.save()
 
 
@@ -21,7 +22,6 @@ def create_transaction(request):
             montos_list = request.POST.getlist('monto')
             tipos_list = request.POST.getlist('tipo')
             #fechas_list = request.POST.getlist('fecha')
-
 
             for cuenta, monto, tipo in zip(cuentas_list, montos_list, tipos_list):
             # Itera a través de las listas de saldos y crea cada registro
@@ -47,7 +47,7 @@ def create_transaction(request):
                     print('si existe')
                     saldo.debe +=  Decimal(monto if tipo == 'cargo' else 0)
                     saldo.haber += Decimal(monto if tipo == 'haber' else 0)
-                    #saldo.fechaSaldo = fecha
+                    saldo.fechaSaldo = fecha
                     saldo.esFinal = False
                     saldo.idPeriodo = period
                     saldo.save()
@@ -56,7 +56,7 @@ def create_transaction(request):
                     SaldosCuentas.objects.create(
                         debe = monto if tipo == 'cargo' else 0,
                         haber = monto if tipo == 'haber' else 0,
-                        #fechaSaldo = fecha,
+                        fechaSaldo = fecha,
                         esFinal = False,
                         idCuenta = cuentaAct,
                         idEstado = estadoComprobacion,

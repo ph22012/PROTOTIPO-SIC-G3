@@ -85,9 +85,23 @@ def seleccionar_Cif(request):
     return render(request, 'select_cif.html')
 
 def costos_indirectos(request):
-    cifAnteriores = Cif.objects.filter(idProyecto =1)
+    cifAnteriores = Cif.objects.filter(idProyecto=1)
+    proyectoAnterior = Proyecto.objects.filter(id = 1).first()
+    proyectoCosteo = Proyecto.objects.filter(id = 2).first()
+    cifActuales = []
+    factor = 2800 / proyectoAnterior.horas_totales 
+    sumOriginal = 0
+    sumAdecuada = 0
+    #factor = proyectoCosteo.horas_totales/ proyectoAnterior.horas_totales 
+    for cif in cifAnteriores:
+        cifNuevo = Cif()
+        cifNuevo.detalle = cif.detalle
+        cifNuevo.monto = cif.monto * Decimal(factor)
+        sumOriginal += cif.monto
+        sumAdecuada += cifNuevo.monto
+        cifActuales.append(cifNuevo)
 
-    return render(request, 'costos_indirectos.html',{'cifOriginales':cifAnteriores})
+    return render(request, 'costos_indirectos.html',{'cifOriginales':cifAnteriores,'cifActuales':cifActuales,'factor':factor,'sumOriginal':sumOriginal,'sumAdecuada':sumAdecuada})
 
 def proyectos_view(request):
     proyectos = Proyecto.objects.all() 

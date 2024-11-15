@@ -2,7 +2,7 @@
 
 from django.shortcuts import render, redirect
 from .forms import CostoForm, EmpleadoForm
-from .models import Costo, Empleado
+from .models import Costo, Empleado, Proyecto
 from decimal import Decimal
 
 # Vista para registrar empleado
@@ -80,3 +80,16 @@ def manoDeObra(request):
         'manoDeObraCosto': manoDeObraCosto,
     })
 
+def proyectos_view(request):
+    proyectos = Proyecto.objects.all() 
+    return render(request, 'proyecto.html', {'proyectos': proyectos})
+
+def proyecto_detalle(request, proyecto_id):
+
+    proyecto = Proyecto.objects.get(id=proyecto_id)
+    empleados = proyecto.empleados.all()
+    
+    return render(request, 'detalle_proyecto.html', {
+        'proyecto': proyecto,
+        'empleados': empleados,
+    })

@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from datetime import date
 from django.shortcuts import render, redirect
-from .models import periodos, estadosFinancieros
+from .models import periodos, estadosFinancieros, tiposEstados
 from catalogocuentas.models import SaldosCuentas, Cuenta
 from decimal import Decimal
+
 
 # Create your views here.
 
@@ -14,31 +15,33 @@ def gestionar(request):
     periodosContables = periodos.objects.all()
     periodoActual = None
     if 'periodoSelected' not in request.session:
-        request.session['periodoSelected'] = "2" 
+        request.session['periodoSelected'] = "2"
+    balanceComprobacion = estadosFinancieros.objects.filter(idTipoEstado = 1, idPeriodo__idPeriodo = int(request.session['periodoSelected'])).first()
+    if  balanceComprobacion == None:
+        estadosFinancieros.objects.create(
+            idTipoEstado = tiposEstados.objects.get(idTipoEstado = 1),
+            idPeriodo = periodos.objects.get(idPeriodo =  int(request.session['periodoSelected']))
+        )
     if request.method == 'POST':
         selected = request.POST.get('seleccion')
         request.session['periodoSelected'] = selected
         return redirect('/gestionar')
     else:
         if request.session['periodoSelected'] != None:
-            print('vamosbien')
-            print(request.session['periodoSelected'])
             for periodo in periodosContables:
                 if str(periodo.idPeriodo) == request.session['periodoSelected']:
                     periodoActual = periodo
-                    print(periodoActual)
-                    print(periodo)
-                    
-                else:
-                    print('iteracion' + str(periodo.idPeriodo))
-                    print('no hay pipipi')
-        else:
-             for periodo in periodosContables:
-                if fechaHoy >= periodo.fechaInicio and fechaHoy <= periodo.fechaFin:
-                  periodoActual = periodo
-                break
-
-    return render(request, 'gestion.html', {'periodoActual':periodoActual, 'periodos':periodosContables})
+        #Aqui se buscan
+        estadoAjustes = estadosFinancieros.objects.filter(idTipoEstado = 2, idPeriodo__idPeriodo = int(request.session['periodoSelected'])).first()   
+        comprobacion2 = estadosFinancieros.objects.filter(idTipoEstado = 3, idPeriodo__idPeriodo = int(request.session['periodoSelected'])).first()   
+        resultados = estadosFinancieros.objects.filter(idTipoEstado = 4, idPeriodo__idPeriodo = int(request.session['periodoSelected'])).first()   
+        general = estadosFinancieros.objects.filter(idTipoEstado = 6, idPeriodo__idPeriodo = int(request.session['periodoSelected'])).first()   
+        #Aqui se registra el resultado de la busqueda
+        ajustesExiste = True if estadoAjustes != None else False
+        comprobacion2Existe = True if comprobacion2 != None else False
+        resultadosExiste = True if resultados != None else False
+        generalExiste = True if general != None else False
+    return render(request, 'gestion.html', {'periodoActual':periodoActual, 'periodos':periodosContables,'ajustesExiste':ajustesExiste,'comprobacion2Existe':comprobacion2Existe,'resultadosExiste':resultadosExiste,'generalExiste':generalExiste})
 #VISTA DEL BALANCE DE COMPROBACIÓN SIN AJUSTAR
 def comprobacion(request):
     #fechaHoy = date.today();
@@ -66,8 +69,25 @@ def comprobacion(request):
 def ajustes(request):
     if 'periodoSelected' not in request.session:
         request.session['periodoSelected'] = "2"
-    balanceAjustes = estadosFinancieros.objects.get(idTipoEstado = 2, idPeriodo__idPeriodo = int(request.session['periodoSelected']))
-    balanceAjustado = estadosFinancieros.objects.get(idTipoEstado = 3, idPeriodo__idPeriodo = int(request.session['periodoSelected']))
+    balanceAjustes = estadosFinancieros.objects.filter(idTipoEstado = 2, idPeriodo__idPeriodo = int(request.session['periodoSelected'])).first()
+    if balanceAjustes == None:
+        estadosFinancieros.objects.create(
+            idTipoEstado = tiposEstados.objects.get(idTipoEstado = 2),
+            idPeriodo = periodos.objects.get(idPeriodo =  int(request.session['periodoSelected']))
+        )
+    
+    balanceAjustado = estadosFinancieros.objects.filter(idTipoEstado = 3, idPeriodo__idPeriodo = int(request.session['periodoSelected'])).first()
+    if balanceAjustado == None:
+        estadosFinancieros.objects.create(
+            idTipoEstado = tiposEstados.objects.get(idTipoEstado = 3),
+            idPeriodo = periodos.objects.get(idPeriodo =  int(request.session['periodoSelected']))
+        )
+    balanceGeneral = estadosFinancieros.objects.filter(idTipoEstado = 6, idPeriodo__idPeriodo = int(request.session['periodoSelected'])).first()
+    if balanceGeneral == None:
+        estadosFinancieros.objects.create(
+            idTipoEstado = tiposEstados.objects.get(idTipoEstado = 6),
+            idPeriodo = periodos.objects.get(idPeriodo =  int(request.session['periodoSelected']))
+        )
 
     period = periodos.objects.get(idPeriodo = int(request.session['periodoSelected']))
     if request.method == 'POST':
@@ -162,7 +182,40 @@ def ajustes(request):
                         idEstado = balanceAjustado,
                         idPeriodo = period
                         )
-                            
+        AjustesRealizados = SaldosCuentas.objects.filter(idEstado__idTipoEstado = 3, idPeriodo__idPeriodo = int(request.session['periodoSelected']))
+        if AjustesRealizados != None:
+            for ajustada in AjustesRealizados:
+                if ajustada.debe > ajustada.haber:
+                    ajustada.debe -= ajustada.haber
+                    ajustada.haber = 0
+                elif ajustada.debe < ajustada.haber: 
+                    ajustada.haber -= ajustada.debe
+                    ajustada.debe = 0
+                elif ajustada.debe == ajustada.haber:
+                    ajustada.debe = 0
+                    ajustada.haber = 0
+                ajustada.save()
+                saldoGeneral = SaldosCuentas.objects.filter(idCuenta = ajustada.idCuenta ,idEstado__idTipoEstado = 6, idPeriodo = period).first()
+                if saldoGeneral != None and ajustada.idCuenta.codClase <= 3:
+                    saldoGeneral.debe = ajustada.debe
+                    saldoGeneral.haber = ajustada.haber
+                    saldoGeneral.fechaSaldo = ajustada.fechaSaldo
+                    saldoGeneral.esFinal = True
+                    saldoGeneral.idCuenta = ajustada.idCuenta
+                    saldoGeneral.save()
+                elif saldoGeneral == None and ajustada.idCuenta.codClase<=3:
+                    SaldosCuentas.objects.create(
+                        debe = ajustada.debe,
+                        haber = ajustada.haber,
+                        fechaSaldo = ajustada.fechaSaldo,
+                        esFinal = True,
+                        idCuenta = ajustada.idCuenta,
+                        idEstado = estadosFinancieros.objects.get(idTipoEstado = 6, idPeriodo = period),
+                        idPeriodo = period
+                    )
+        
+
+        return redirect('/gestionar/balance_ajustado')   
 
     balanceComprobacion = SaldosCuentas.objects.filter(idPeriodo_id = int(request.session['periodoSelected']), idEstado__idTipoEstado = 1 )
     sumDebeComp = 0
@@ -172,51 +225,65 @@ def ajustes(request):
         sumHaberComp += dato.haber
     cuentasAjustes = Cuenta.objects.filter(codClase = 4)
     
-    return render(request, 'ajustes.html',{'sinAjustar':balanceComprobacion, 'cuentasAjustes': cuentasAjustes, 'sumDebeComp':sumDebeComp,'sumHaberComp':sumHaberComp})
+    return render(request, 'ajustes.html',{'sinAjustar':balanceComprobacion, 'cuentasAjustes': cuentasAjustes, 'sumDebeComp':sumDebeComp,'sumHaberComp':sumHaberComp,'periodoActual':period})
 
 #VISTA DEL BALANCE DE COMPROBACION AJUSTADO
 def comprobacionAjustado(request):
     if 'periodoSelected' not in request.session:
         request.session['periodoSelected'] = '2'
-
+    periodo = periodos.objects.get(idPeriodo = int(request.session['periodoSelected']))
     cuentas = Cuenta.objects.all()
     saldosSinAjustar = []
-    saldosAjustados = []
     ajustes = []
-
+    saldosAjustados = []
+    debe1 = 0
+    haber1= 0
+    debe2 = 0
+    debe3 = 0
+    haber2 = 0
+    haber3 = 0
     for cuenta in cuentas:
         #1° Saldo sin ajustar
         saldoNoAjustado = SaldosCuentas.objects.filter(idCuenta = cuenta, idPeriodo_id = int(request.session['periodoSelected']), idEstado__idTipoEstado = 1).first()
         if saldoNoAjustado != None:
+            debe1 += Decimal(saldoNoAjustado.debe)
+            haber1 += Decimal(saldoNoAjustado.debe)
             saldosSinAjustar.append(saldoNoAjustado)
-        #2° Saldo ajustado
-        saldoAjustado = SaldosCuentas.objects.filter(idCuenta = cuenta, idPeriodo_id = int(request.session['periodoSelected']), idEstado__idTipoEstado = 2).first()
+        #2° Ajustes realizados
+        ajusteRealizado = SaldosCuentas.objects.filter(idCuenta = cuenta, idPeriodo_id = int(request.session['periodoSelected']), idEstado__idTipoEstado = 2).first()
+        if ajusteRealizado != None:
+            debe2 += Decimal(ajusteRealizado.debe)
+            haber2 += Decimal(ajusteRealizado.debe)
+            ajustes.append(ajusteRealizado)
+        #3° Saldos ajustados
+        saldoAjustado = SaldosCuentas.objects.filter(idCuenta = cuenta, idPeriodo_id = int(request.session['periodoSelected']), idEstado__idTipoEstado = 3).first()
         if saldoAjustado != None:
+            debe3 += Decimal(saldoAjustado.debe)
+            haber3 += Decimal(saldoAjustado.debe)
             saldosAjustados.append(saldoAjustado)
-        #3° Como no se guardan los ajustes tal cual, se deben calcular
 
-
-    
-    
-
-    return render(request, 'comprobacion_Ajustado.html',{'saldosSinAjustar': saldosSinAjustar, 'saldosAjustados':saldosAjustados})
+    return render(
+        request, 'comprobacion_Ajustado.html',
+        {'saldosSinAjustar': saldosSinAjustar,'ajustesRealizados':ajustes ,
+         'saldosAjustados':saldosAjustados,'debe1':debe1,'haber1':haber1,
+         'debe2':debe2,'haber2':haber2,'debe3':debe3,'haber3':haber3,'periodoActual':periodo})
 
 #VISTA DEL BALANCE GENERAL
 def general(request):
-    fechaHoy = date.today();
-    periodosContables = periodos.objects.all()
-    periodoActual = None
-    saldosAll = SaldosCuentas.objects.all()
+    if 'periodoSelected' not in request.session:
+        request.session['periodoSelected'] = "2"
+    balanceGeneral = estadosFinancieros.objects.filter(idTipoEstado = 6, idPeriodo__idPeriodo = int(request.session['periodoSelected'])).first()
+    if balanceGeneral == None:
+        estadosFinancieros.objects.create(
+            idTipoEstado = tiposEstados.objects.get(idTipoEstado = 6),
+            idPeriodo = periodos.objects.get(idPeriodo =  int(request.session['periodoSelected']))
+        )
+    
+    
+    periodoActual = periodos.objects.get(idPeriodo = int(request.session['periodoSelected']))
     sumDebe = 0
     sumHaber = 0
-
-    for periodo in periodosContables:
-        if fechaHoy >= periodo.fechaInicio and fechaHoy <= periodo.fechaFin:
-            periodoActual = periodo
-            break
-    
-    saldosPeriodo = saldosAll.filter(idPeriodo__idPeriodo=periodoActual.idPeriodo)
-    saldosGeneral = saldosPeriodo.filter(idEstado__idTipoEstado=5)
+    saldosGeneral = SaldosCuentas.objects.filter(idEstado__idTipoEstado=6, idPeriodo = periodoActual)
 
     for saldo in saldosGeneral:
         sumDebe += saldo.debe
@@ -227,19 +294,16 @@ def general(request):
 
 #VISTA DEL ESTADO DE RESULTADOS
 def resultados(request):
-
-    fechaHoy = date.today();
-    periodosContables = periodos.objects.all()
-    periodoActual = None
-    saldosAll = SaldosCuentas.objects.all()
-
-    for periodo in periodosContables:
-        if fechaHoy >= periodo.fechaInicio and fechaHoy <= periodo.fechaFin:
-            periodoActual = periodo
-            break
-    
-    saldosPeriodo = saldosAll.filter(idPeriodo__idPeriodo=periodoActual.idPeriodo)
-    saldosResultado = saldosPeriodo.filter(idEstado__idTipoEstado=3)
+    if 'periodoSelected' not in request.session:
+        request.session['periodoSelected'] = "2"
+    estadoResultado = estadosFinancieros.objects.filter(idTipoEstado = 4, idPeriodo__idPeriodo = int(request.session['periodoSelected'])).first()
+    if estadoResultado == None:
+        estadosFinancieros.objects.create(
+            idTipoEstado = tiposEstados.objects.get(idTipoEstado = 4),
+            idPeriodo = periodos.objects.get(idPeriodo =  int(request.session['periodoSelected']))
+        )
+    periodoActual = periodos.objects.get(idPeriodo = int(request.session['periodoSelected']))
+    saldosResultado = SaldosCuentas.objects.filter(idPeriodo = periodoActual, idEstado__idTipoEstado =3)
     
     ventasNetas = saldosResultado.filter(idCuenta__codCuenta__in=["5101", "4101","4102"])
     utilidadBruta = 0

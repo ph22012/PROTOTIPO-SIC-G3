@@ -8,11 +8,13 @@
             <h4 class="text-center col-12"> Registro de ajustes </h4>
             <h4 class="text-center col-12"> del {{periodoActual.fechaInicio|date:"d/m"}} al {{periodoActual.fechaFin|date:"d/m"}} del {{periodoActual.fechaInicio|date:"Y"}} </h4>
         </div>
-    <form method="POST" action="">
-        
-        {% csrf_token %}
+        <div class="d-flex justify-content-end">
+            <a href="/gestionar/ajustes">
+                <button class="btn-outline-warning" style="width:200px;"> Ajustar</button>
+            </a>
+        </div>
         <div style="margin-top: 40px;">
-            <table class="table table-bordered w-100">
+            <table class="table table-bordered border-primary w-100">
                 <thead>
                     <tr>
                         <th class="text-center align-content-center" scope="col" rowspan="2">Codigo</th>
@@ -38,19 +40,22 @@
                             <td class="text-center">{{dato.idCuenta.nameCuenta}}</td>
                             <td class="text-center">{{dato.debe}}</td>
                             <td class="text-center">{{dato.haber}}</td>
-                            {%for dato2 in saldosAjustados%}
+                            {%for dato2 in ajustesRealizados%}
                                 {%if dato.idCuenta == dato2.idCuenta%}
                                 <td class="text-center">{{dato2.debe}}</td>
                                 <td class="text-center">{{dato2.haber}}</td>
-                                <td class="text-center"> Aqui luego calculo</td>
-                                <td class="text-center"> Aqui luego calculo</td>
-                                
+                                {%endif%}
+                            {%endfor%}
+                            {%for dato3 in saldosAjustados%}
+                                {%if dato.idCuenta == dato3.idCuenta%}
+                                <td class="text-center">{{dato3.debe}}</td>
+                                <td class="text-center">{{dato3.haber}}</td>
                                 {%endif%}
                             {%endfor%}
                         </tr>
-                        {%endfor%}
+                    {%endfor%}
 
-                    {%for saldo in saldosAjustados%}
+                    {%for saldo in ajustesRealizados%}
 
                     {%if saldo.idCuenta.codClase == 4 %}
                     <tr>
@@ -62,52 +67,28 @@
                         <!-- Agregar el id del ajuste al nombre del input -->
                         <td class="text-center">{{saldo.debe}}</td>
                         <td class="text-center">{{saldo.haber}}</td>
-                        <td class="text-center"> Aqui luego calculo</td>
-                        <td class="text-center"> Aqui luego calculo</td>
+                        {%for saldo2 in saldosAjustados%}
+                            {%if saldo.idCuenta == saldo2.idCuenta%}
+                                <td class="text-center">{{saldo2.debe}}</td>
+                                <td class="text-center">{{saldo2.haber}}</td>
+                            {%endif%}
+                        {%endfor%}
                     </tr>
                     {%endif%}
                     {%endfor%}
                     <tr>
                         <td colspan="2" class="text-center"> Total</td>
-                        <td>{{sumDebeComp}} </td>
-                        <td>{{sumHaberComp}} </td>
-                        <td id="totalDebe" class="text-center">0</td>
-                        <td id="totalHaber" class="text-center">0</td>
+                        <td class="text-center">{{debe1}} </td>
+                        <td class="text-center">{{haber1}} </td>
+                        <td class="text-center">{{debe2}} </td>
+                        <td class="text-center">{{haber2}} </td>
+                        <td class="text-center">{{debe3}} </td>
+                        <td class="text-center">{{haber3}} </td>
                     </tr>
                 </tbody>
             </table>
-            <button type="submit" class=" btn btn-primary mt-3">Guardar</button>
-
         </div>
-    </form>
+   
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const inputs = document.querySelectorAll('input[type="number"]');
-            const totalDebe = document.getElementById('totalDebe');
-            const totalHaber = document.getElementById('totalHaber');
-    
-            function updateTotals() {
-                let sumDebe = 0;
-                let sumHaber = 0;
-    
-                inputs.forEach(input => {
-                    const value = parseFloat(input.value) || 0;
-                    if (input.name.includes('Debito')) {
-                        sumDebe += value;
-                    } else if (input.name.includes('haber')) {
-                        sumHaber += value;
-                    }
-                });
-    
-                totalDebe.textContent = sumDebe.toFixed(2);
-                totalHaber.textContent = sumHaber.toFixed(2);
-            }
-    
-            inputs.forEach(input => {
-                input.addEventListener('input', updateTotals);
-            });
-        });
-    </script>
 {%endblock%}

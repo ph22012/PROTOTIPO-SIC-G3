@@ -39,13 +39,28 @@
         <li class="list-group-item">
           <div class="row">
             <div class="col-8 text-center">
+              <h5>Balance de comprobacion Ajustado</h5>
+            </div>
+            <div class="col-2 offset-2 text-center">
+              {%if ajustesExiste == False %}
+              <a href="/gestionar/ajustes"><button class="btn-outline-success w-100">Generar</button></a>  
+              {%else%}
+              <a href="/gestionar/balance_ajustado"><button class="btn-outline-primary w-100">Ver</button></a>
+              {%endif%}
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-8 text-center">
               <h5>Estado de resultados</h5>
             </div>
-            <div class="col-2 text-center">
+            <div class="col-2 offset-2 text-center">
+              {%if resultadosExiste == False %}
+              <a href="/gestionar/estado-resultado"><button class="btn-outline-success w-100">Generar</button></a>  
+              {%else%}
               <a href="/gestionar/estado-resultado"><button class="btn-outline-primary w-100">Ver</button></a>
-            </div>
-            <div class="col-2 text-center">
-              <button class="btn-outline-success w-100">Generar</button>
+              {%endif%}
             </div>
           </div>
         </li>
@@ -67,12 +82,14 @@
             <div class="col-8 text-center">
               <h5>Balance general</h5>
             </div>
-            <div class="col-2 text-center">
+            <div class="col-2 offset-2 text-center">
+              {%if generalExiste == False %}
+              <a href="/gestionar/balance-general"><button class="btn-outline-success w-100">Generar</button></a>  
+              {%else%}
               <a href="/gestionar/balance-general"><button class="btn-outline-primary w-100">Ver</button></a>
+              {%endif%}
             </div>
-            <div class="col-2 text-center">
-              <button class="btn-outline-success w-100">Generar</button>
-            </div>
+            
           </div>
         </li>
       </ul>

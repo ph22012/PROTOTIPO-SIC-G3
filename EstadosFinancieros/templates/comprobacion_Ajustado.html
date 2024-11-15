@@ -1,0 +1,94 @@
+{% extends 'layouts/base.html'%}
+
+{% block content %}
+    <div class="container align-content-center">
+
+        <div class=" row mx-3" style="margin-top: 50px">
+            <h2 class="text-center col-12"> Gestion Expert S.A de C.V </h2>
+            <h4 class="text-center col-12"> Registro de ajustes </h4>
+            <h4 class="text-center col-12"> del {{periodoActual.fechaInicio|date:"d/m"}} al {{periodoActual.fechaFin|date:"d/m"}} del {{periodoActual.fechaInicio|date:"Y"}} </h4>
+        </div>
+        <div class="d-flex justify-content-end">
+            <a href="/gestionar/ajustes">
+                <button class="btn-outline-warning" style="width:200px;"> Ajustar</button>
+            </a>
+        </div>
+        <div style="margin-top: 40px;">
+            <table class="table table-bordered border-primary w-100">
+                <thead>
+                    <tr>
+                        <th class="text-center align-content-center" scope="col" rowspan="2">Codigo</th>
+                        <th class="text-center align-content-center"  scope="col" rowspan="2">Cuenta</th>
+                        <th class="text-center" scope="col" colspan="2">Balance de comprobacion</th>
+                        <th class="text-center" scope="col" colspan="2">Ajustes</th>
+                        <th class="text-center" scope="col" colspan="2">Balance de comprobacion ajustado</th>
+                    </tr>
+
+                    <tr>
+                        <th class="text-center" scope="col">Debe</th>
+                        <th class="text-center" scope="col">Haber</th>
+                        <th class="text-center" scope="col">Debe</th>
+                        <th class="text-center" scope="col">Haber</th>
+                        <th class="text-center" scope="col">Debe</th>
+                        <th class="text-center" scope="col">Haber</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for dato in saldosSinAjustar%}
+                        <tr>
+                            <td class="text-center">{{dato.idCuenta.codCuenta}}</td>
+                            <td class="text-center">{{dato.idCuenta.nameCuenta}}</td>
+                            <td class="text-center">{{dato.debe}}</td>
+                            <td class="text-center">{{dato.haber}}</td>
+                            {%for dato2 in ajustesRealizados%}
+                                {%if dato.idCuenta == dato2.idCuenta%}
+                                <td class="text-center">{{dato2.debe}}</td>
+                                <td class="text-center">{{dato2.haber}}</td>
+                                {%endif%}
+                            {%endfor%}
+                            {%for dato3 in saldosAjustados%}
+                                {%if dato.idCuenta == dato3.idCuenta%}
+                                <td class="text-center">{{dato3.debe}}</td>
+                                <td class="text-center">{{dato3.haber}}</td>
+                                {%endif%}
+                            {%endfor%}
+                        </tr>
+                    {%endfor%}
+
+                    {%for saldo in ajustesRealizados%}
+
+                    {%if saldo.idCuenta.codClase == 4 %}
+                    <tr>
+                        <td class="text-center">{{saldo.idCuenta.codCuenta}}</td>
+                        <td class="text-center">{{saldo.idCuenta.nameCuenta}}</td>
+                        <td class="text-center">0.00</td>
+                        <td class="text-center"> 0.00</td>
+                        
+                        <!-- Agregar el id del ajuste al nombre del input -->
+                        <td class="text-center">{{saldo.debe}}</td>
+                        <td class="text-center">{{saldo.haber}}</td>
+                        {%for saldo2 in saldosAjustados%}
+                            {%if saldo.idCuenta == saldo2.idCuenta%}
+                                <td class="text-center">{{saldo2.debe}}</td>
+                                <td class="text-center">{{saldo2.haber}}</td>
+                            {%endif%}
+                        {%endfor%}
+                    </tr>
+                    {%endif%}
+                    {%endfor%}
+                    <tr>
+                        <td colspan="2" class="text-center"> Total</td>
+                        <td class="text-center">{{debe1}} </td>
+                        <td class="text-center">{{haber1}} </td>
+                        <td class="text-center">{{debe2}} </td>
+                        <td class="text-center">{{haber2}} </td>
+                        <td class="text-center">{{debe3}} </td>
+                        <td class="text-center">{{haber3}} </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+   
+    </div>
+
+{%endblock%}

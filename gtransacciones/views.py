@@ -27,7 +27,7 @@ def create_transaction(request):
             # Itera a través de las listas de saldos y crea cada registro
                 cuentaAct = Cuenta.objects.get(pk=cuenta)
                 period = periodos.objects.get(idPeriodo = int(request.session['periodoSelected']))
-                estadoComprobacion = estadosFinancieros.objects.get(idEstado=1)
+                estadoComprobacion = estadosFinancieros.objects.get(idTipoEstado = 1, idPeriodo = period)
                 
                 #for account in cuentas:
                 #    if account.idCuenta == cuentaAct.idCuenta:

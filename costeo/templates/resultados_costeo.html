@@ -1,0 +1,26 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Costo directo</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <h2>SALARIO REAL DEL EMPLEADO {{ empleado|upper }}</h2>
+    <ul>
+        <li>Vacaciones: ${{ vacaciones }}</li>
+        <li>Aguinaldo: ${{ aguinaldo }}</li>
+        <li>ISSS: ${{ isss }}</li>
+        <li>AFP: ${{ afp }}</li>
+        <li>Salario Real Semanal: ${{ salario_real_semanal }}</li>
+        <li>Salario Semanal por Hora: ${{ salario_semanal_por_hora }}</li>
+    </ul>    
+    <a href="{% url 'costo_mano_obra' %}" class="btn btn-primary">Ver Mano de Obra Total</a>
+
+</body>
+</html>
+{% endblock %}

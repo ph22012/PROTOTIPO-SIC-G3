@@ -28,5 +28,5 @@ urlpatterns = [
     #path('login/', include('iniciosesion.urls')),
     path('', include('EstadosFinancieros.urls')),
     path('', include('catalogocuentas.urls')),
-    
+    path('', include('costeo.urls')),
 ]

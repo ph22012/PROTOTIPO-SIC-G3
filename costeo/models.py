@@ -80,3 +80,14 @@ class Cif(models.Model):
     detalle = models.CharField(max_length=100)
     monto = models.DecimalField(max_digits=10,decimal_places=2)
     idProyecto = models.IntegerField()
+
+class Proyecto(models.Model):
+    nombre = models.CharField(max_length=200)
+    imagen = models.CharField(max_length=200)  # El nombre de la imagen o el path relativo
+    descripcion = models.TextField()
+    meses_desarrollo = models.IntegerField()
+    horas_totales = models.IntegerField()
+    empleados = models.ManyToManyField(Empleado, related_name='proyectos')
+
+    def __str__(self):
+        return self.nombre

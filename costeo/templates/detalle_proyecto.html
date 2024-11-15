@@ -1,0 +1,30 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">{{ proyecto.nombre }}</h1>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <img src="{% static 'icons/'|add:proyecto.imagen %}" alt="Imagen del Proyecto" class="img-fluid mb-3">
+        </div>
+        <div class="col-md-6">
+            <h3>Descripción:</h3>
+            <p class="text-justify">{{ proyecto.descripcion }}</p>
+            <p><strong>Meses de desarrollo:</strong> {{ proyecto.meses_desarrollo }} meses</p>
+            <p><strong>Horas de desarrollo:</strong> {{ proyecto.horas_totales }} horas</p>
+            
+            <p><strong>Trabajadores:</strong></p>
+            <ul>
+                {% for empleado in empleados %}
+                    <li>{{ empleado.nombre }}</li>
+                {% endfor %}
+            </ul>
+
+            <div class="text-right mt-3">
+                <a href="{% url 'registrar_empleado' %}" class="btn btn-success">Calcular costos del proyecto</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

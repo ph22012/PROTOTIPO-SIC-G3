@@ -2,7 +2,7 @@
 
 from django.shortcuts import render, redirect
 from .forms import CostoForm, EmpleadoForm
-from .models import Costo, Empleado, Cif
+from .models import Costo, Empleado, Cif, Proyecto
 from decimal import Decimal
 
 # Vista para registrar empleado
@@ -80,6 +80,7 @@ def manoDeObra(request):
         'manoDeObraCosto': manoDeObraCosto,
     })
 
+
 def seleccionar_Cif(request):
     return render(request, 'select_cif.html')
 
@@ -87,3 +88,18 @@ def costos_indirectos(request):
     cifAnteriores = Cif.objects.filter(idProyecto =1)
 
     return render(request, 'costos_indirectos.html',{'cifOriginales':cifAnteriores})
+
+def proyectos_view(request):
+    proyectos = Proyecto.objects.all() 
+    return render(request, 'proyecto.html', {'proyectos': proyectos})
+
+def proyecto_detalle(request, proyecto_id):
+
+    proyecto = Proyecto.objects.get(id=proyecto_id)
+    empleados = proyecto.empleados.all()
+    
+    return render(request, 'detalle_proyecto.html', {
+        'proyecto': proyecto,
+        'empleados': empleados,
+    })
+

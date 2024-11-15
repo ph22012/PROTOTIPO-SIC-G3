@@ -75,3 +75,13 @@ class Costo(models.Model):
     def costo_total_mano_de_obra(self):
         costoTotalManoDeObra = (self.costoRealJunior() * Decimal(8)) + (self.costoRealSenior() * Decimal(2))
         return costoTotalManoDeObra
+class Proyecto(models.Model):
+    nombre = models.CharField(max_length=200)
+    imagen = models.CharField(max_length=200)  # El nombre de la imagen o el path relativo
+    descripcion = models.TextField()
+    meses_desarrollo = models.IntegerField()
+    horas_totales = models.IntegerField()
+    empleados = models.ManyToManyField(Empleado, related_name='proyectos')
+
+    def __str__(self):
+        return self.nombre

@@ -11,7 +11,10 @@ def login_sesion(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)  
-            return redirect('/create-transaction/') 
+            return redirect('/menu/') 
         else:
             return HttpResponse("Credenciales incorrectas. Por favor, intenta de nuevo.")
     return render(request, 'iniciosesion.html')
+
+def menu(request): 
+    return render(request, 'menu.html')

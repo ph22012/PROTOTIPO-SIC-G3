@@ -8,6 +8,34 @@
             <h4 class="text-center col-12"> Estado de capital </h4>
             <h4 class="text-center col-12"> del {{periodoActual.fechaInicio|date:"d/m"}} al {{periodoActual.fechaFin|date:"d/m"}} del {{periodoActual.fechaInicio|date:"Y"}} </h4>
         </div>
-
+        <div style="margin-top:40px ;">
+            <table class="table">
+                <thead>
+                    <tr style="background-color: lightblue;">
+                        <th scope="col text-center"> Operacion</th>
+                        <th scope="col"> Cuenta</th>
+                        <th scope="col"> Monto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for saldo in saldosCap %}
+                            <tr>
+                                <td>(+)</td>
+                                <td>{{saldo.idCuenta.nameCuenta}}</td>
+                                {% if saldo.debe > 0 %}
+                            <td>{{saldo.debe}}</td>
+                                {%else%}
+                            <td>{{saldo.haber}}</td>
+                                {%endif%}
+                            </tr>
+                    {% endfor%}
+                            <tr style="background-color: gray;">
+                                <td colspan="2" class="fw-bold text-center">Nuevo Capital = </td>
+                                <td class="fw-bold" colspan="2">{{nuevoMonto}}</td>
+                            </tr>
+                            
+                </tbody>
+            </table>
+        </div>
     </div>
 {%endblock%}

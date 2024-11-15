@@ -97,9 +97,20 @@ def costos_indirectos(request):
         cifNuevo = Cif()
         cifNuevo.detalle = cif.detalle
         cifNuevo.monto = cif.monto * Decimal(factor)
+        cifNuevo.idProyecto = proyectoCosteo
         sumOriginal += cif.monto
         sumAdecuada += cifNuevo.monto
         cifActuales.append(cifNuevo)
+    
+    for cif in cifActuales:
+        cifProyecto = Cif.objects.filter(idProyecto = 2, detalle = cif.detalle, monto =cif.monto).first()
+        if cifProyecto != None:
+            cifProyecto = cif
+            cifProyecto.save()
+        else:
+            Cif.objects.create(cifProyecto)
+
+
 
     return render(request, 'costos_indirectos.html',{'cifOriginales':cifAnteriores,'cifActuales':cifActuales,'factor':factor,'sumOriginal':sumOriginal,'sumAdecuada':sumAdecuada})
 

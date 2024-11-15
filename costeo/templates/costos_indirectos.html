@@ -1,0 +1,27 @@
+{% extends 'layouts/base.html' %} {%block content%}
+
+<div class="container align-content-center m-5">
+  <h2 class="text-center col-12">Detalles CIF</h2>
+  <div class="m-4 align-content-center">
+    <table class="table table-bordered w-50 mx-auto">
+      <thead>
+        <tr>
+          <th class="text-center">Detalle</th>
+          <th class="text-center">Monto</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%for costo in cifOriginales%}
+        <tr>
+          <td class="text-center">{{costo.detalle}}</td>
+          <td class="text-center">{{costo.monto}}</td>
+        </tr>
+        {%endfor%}
+      </tbody>
+    </table>
+    <div class="d-flex m-2 justify-content-end">
+      <button class="btn-outline-primary">Guardar</button>
+    </div>
+  </div>
+</div>
+{%endblock%}
